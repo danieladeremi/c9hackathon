@@ -11,7 +11,7 @@ All work happens on a personal machine; the entry must be solely the entrant's.
 - [ ] Register on cloud9.devpost.com ("Join Hackathon"); trial codes arrive by email within 5 business days.
 - [ ] Install JetBrains Toolbox, then PyCharm and WebStorm. Activate the All Products Pack code, then the AI Ultimate code.
 - [ ] Install JetBrains Air in the IDE (https://www.jetbrains.com/air/ides/) and connect an agent (Junie, Claude Agent or Codex). Turn off training/retention on inputs wherever an agent offers it (data licence requirement).
-- [ ] Install Python 3.14 (built-in zstd), uv, Node.js LTS and git.
+- [x] Install Python 3.14 (built-in zstd), uv, Node.js LTS and git.
 - [ ] Clone both repos side by side:
   ```
   mkdir hackathon && cd hackathon
@@ -33,19 +33,23 @@ All work happens on a personal machine; the entry must be solely the entrant's.
 
 Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (default `../stl-hackathon-2026-grid-starter`) and writing a local DuckDB file under `data/` (gitignored).
 
-- [ ] Inspect one LoL feed: first and last envelopes, all event types, how draft actions, side and first-pick selection appear. Record findings in the design doc.
-- [ ] Load `meta/` tables (games, rosters, teams, players, characters, tournaments).
-- [ ] Extract per game: draft sequence in order (pick/ban, team, side, champion, phase), winner, patch, game number in series.
+- [x] Inspect one LoL feed: first and last envelopes, all event types, how draft actions, side and first-pick selection appear. Record findings in the design doc.
+- [x] Load `meta/` tables (games, rosters, teams, players, characters, tournaments).
+- [x] Extract per game: draft sequence in order (pick/ban, team, side, champion, phase), winner, patch, game number in series.
 - [ ] Extract per game per role: champion, player, gold and XP at 10/14/20 minutes; lane gold difference at 14.
-- [ ] Extract team-state snapshots, one sampled per 5-minute window per game (features listed in the design doc).
-- [ ] Handle the starter repo's caveats: rolled-back games (`series-!started-game`), missing games, team renames (join on IDs).
-- [ ] Tests on a small synthetic feed (no real data in the repo).
+  - Done: per-player minute snapshots (gold, XP, level, CS, K/D/A, position) and roles inferred from lane position plus player history. Left: lane gold/XP difference views at 10/14/20 (SQL over `player_minutes`); 17 team-games (~0.5%) still lack a full role set.
+- [x] Extract team-state snapshots, one sampled per 5-minute window per game (features listed in the design doc).
+- [x] Handle the starter repo's caveats: rolled-back games (`series-!started-game`), missing games, team renames (join on IDs).
+- [x] Tests on a small synthetic feed (no real data in the repo).
 
 **Done when:** one command rebuilds the DuckDB file from scratch, and C9 Kia's 2026 games and drafts can be queried from it.
+
+**Status (20 Nov):** `uv run python -m pipeline.build` rebuilds `data/draft.duckdb` from all 745 series in ~3 minutes (2 workers, below-normal priority, peak ~230 MB). `uv run python -m pipeline.checks` reports data quality: 1,737 games match `meta/` exactly, 0 winner mismatches, 0 Fearless repeat picks. Snapshots are stored every minute; 5-minute sampling happens at model time.
 
 ## 2. Draft board and evidence layer (target 10 Dec)
 
 - [ ] Confirm current LCS 2026 rules: side vs first-pick selection, pick/ban order, Fearless rules per series length.
+  - From the data: the first-pick team was on red side in 246 of 1,737 games, so side and first pick are separate choices; Fearless locks picks (not bans) for both teams across the series.
 - [ ] FastAPI service: draft state, legal actions, Fearless-excluded champions.
 - [ ] React + TypeScript UI (WebStorm): draft board for a Bo1/Bo3/Bo5 series.
 - [ ] C9 Kia champion pools: seeded from pro games, editable by the coach.

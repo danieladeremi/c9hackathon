@@ -16,6 +16,19 @@ C9 Kia's coaches prepare drafts in spreadsheets. They need to know, at each mome
 
 Features 1-3 are a complete entry on their own; 4 and 5 are added if time allows.
 
+## What sets it apart (refinement, 2026-11-20)
+
+Most Category 2 entries will have a tendency table and a Fearless draft board, because the blueprint asks for both. Three ideas make this entry different; they reuse the WPA tables, so they are mostly display and modelling on top of features 2-4.
+
+1. **Fearless series value (the headline).** In Fearless, a pick is locked for *both* teams for the rest of the series, so every candidate is priced three ways:
+   - *Now*: its WPA in this game (feature 3).
+   - *Denial*: how much the opponent's expected WPA in later games drops because the champion is gone from their pool. Taking an opponent's comfort pick denies it to them for the whole series.
+   - *Cost*: how much C9's own expected WPA in later games drops, measured as the gap to C9's next-best option in that role.
+
+   **Series value = now + denial − cost.** It answers the judges' "how to win" question directly ("taking Rumble in Game 1 removes the opponent top laner's best Game 3 option"). Bans do not carry over in Fearless (confirmed in the GRID data: bans repeat across games, picks never do), so denial comes only from picks.
+2. **Opponent next-action prediction with a measured hit rate.** For each draft slot, the opponent's likely bans and picks, from their history by game number and draft phase, minus champions already locked. The hit rate on held-out series is shown beside it ("our top-3 predicted bans were right X% of the time"), so a coach knows how far to trust it.
+3. **Replay mode.** Step through a real past C9 series slot by slot and show what the tool recommended against what was actually picked, and how each game ended. It is the core of the demo video and an honest check of the tool. Recommendations come only from data before that series (no leakage).
+
 ## WPA model
 
 Method follows xPetu, "Win probability estimation for strategic decision-making in esports" (Aalto University master's thesis, 2024, CC BY-NC-SA 4.0; method only, no text or figures reused). The thesis evaluates actions (item purchases) by the change in an in-game win-probability model over the action's effective window, averaged over similar game states. We apply the same method to picks.
@@ -55,6 +68,15 @@ Method follows xPetu, "Win probability estimation for strategic decision-making 
 | UI | React + TypeScript; draft board, WPA ranked list with interval bars, tendency charts | WebStorm |
 
 Junie and JetBrains Air are used throughout; `.idea/`, `.junie/`, `.air/` are committed and `AI_SHOWCASE.md` is kept as work happens for the bonus prize.
+
+## Data findings (feed inspection, 2026-11-20)
+
+- `seriesState` is **not** always a full snapshot: about 1-2% of events have `includesFullState`; the rest carry only changed fields, nested by ID. The pipeline keeps a running state by deep-merging partial states and lists by `id`.
+- Draft: 20 `draftActions` per game in standard order (6 bans, 6 picks, 4 bans, 4 picks). Draft events can be reversed (`team-!banned-character`); the final state holds the corrected sequence. Blue side bans first.
+- Fearless: across a Bo5, all 40 picks are distinct while bans repeat. Hard Fearless on picks only.
+- Roles: `players[].roles` is empty and roster order is not role order. Roles are inferred: jungler from jungle-item and neutral-minion farm at 10:00; the other four from lane positions between 1:30 and 14:00; support is the bot-laner with fewer lane minions. Checked by hand against a C9 vs TL Bo5 (20/20 correct).
+- Clock glitches: some feeds briefly report a game clock of about 35,000,000 s. The pipeline ignores clock values above 100 minutes or jumps of more than 5 minutes.
+- Per-team objective counts (dragons by type, grubs, herald, baron) are in `teams[].objectives`; towers and inhibitors (`fortifier`) in `games[].structures`. Player level = `increaseLevel` count + 1.
 
 ## Open questions
 
