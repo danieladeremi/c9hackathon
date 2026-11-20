@@ -7,7 +7,7 @@ the GRID starter repo, and jetbrains.com/air.
 ## Status
 
 - Category: **2 (League of Legends)**
-- Project idea: C9 Draft Planner. Design and build order: [docs/design/2026-11-19-draft-planner.md](docs/design/2026-11-19-draft-planner.md). Read it before starting work.
+- Project idea: C9 Draft Planner. Design: [docs/design/2026-11-19-draft-planner.md](docs/design/2026-11-19-draft-planner.md). Setup steps, milestones and progress tracker: [docs/design/2026-11-19-implementation-plan.md](docs/design/2026-11-19-implementation-plan.md). Read both before starting work, and tick tracker items as they finish.
 - Unknown: the per-category prize breakdown (not on the pages pasted so far).
 - Ownership confirmed: the entry is solely the entrant's.
 
