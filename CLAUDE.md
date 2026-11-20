@@ -11,6 +11,11 @@ the GRID starter repo, and jetbrains.com/air.
 - Unknown: the per-category prize breakdown (not on the pages pasted so far).
 - Ownership confirmed: the entry is solely the entrant's.
 
+## Workflow
+
+- Solo personal repo: commit and push directly to `main`. No feature branches or PRs.
+- Add files individually and run the GRID data pre-push check (below) before every push.
+
 ## Key dates (Pacific Time)
 
 | Milestone | Date |
