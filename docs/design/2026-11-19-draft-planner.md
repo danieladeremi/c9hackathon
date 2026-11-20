@@ -72,7 +72,7 @@ Junie and JetBrains Air are used throughout; `.idea/`, `.junie/`, `.air/` are co
 ## Data findings (feed inspection, 2026-11-20)
 
 - `seriesState` is **not** always a full snapshot: about 1-2% of events have `includesFullState`; the rest carry only changed fields, nested by ID. The pipeline keeps a running state by deep-merging partial states and lists by `id`.
-- Draft: 20 `draftActions` per game in standard order (6 bans, 6 picks, 4 bans, 4 picks). Draft events can be reversed (`team-!banned-character`); the final state holds the corrected sequence. Blue side bans first.
+- Draft: 20 `draftActions` per game. The order depends on which team has **first pick**, not on side: first-pick team F, other team S: bans F S F S F S, picks F S S F F S, bans S F S F, picks S F F S. Holds for 1,720 of 1,721 complete drafts (one feed records slots 12/13 swapped). The first-pick team was on red side in 246 of 1,737 games. Draft events can be reversed (`team-!banned-character`); the final state holds the corrected sequence.
 - Fearless: across a Bo5, all 40 picks are distinct while bans repeat. Hard Fearless on picks only.
 - Roles: `players[].roles` is empty and roster order is not role order. Roles are inferred: jungler from jungle-item and neutral-minion farm at 10:00; the other four from lane positions between 1:30 and 14:00; support is the bot-laner with fewer lane minions. Checked by hand against a C9 vs TL Bo5 (20/20 correct).
 - Clock glitches: some feeds briefly report a game clock of about 35,000,000 s. The pipeline ignores clock values above 100 minutes or jumps of more than 5 minutes.

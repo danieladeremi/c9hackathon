@@ -32,6 +32,29 @@ This writes `data/draft.duckdb` (gitignored). The build uses 2 worker processes 
 
 Tables: `games`, `draft_actions`, `player_games` (with inferred role), `team_minutes`, `player_minutes`, plus `series` and `meta_*` copies of the starter repo's index tables.
 
+## Run the draft board
+
+Needs [Node.js](https://nodejs.org/) 20+ as well. In two terminals:
+
+```bash
+uv run uvicorn planner.api:app --port 8000     # API (reads data/draft.duckdb)
+cd web && npm install && npm run dev           # UI on http://localhost:5173
+```
+
+Pick an opponent and a format, then click champions to fill each slot in draft order. For each slot the right-hand panel shows:
+
+- **This slot**: the opponent's likely bans or picks when they are drafting; their most-picked champions still open when C9 bans; C9's comfort picks still open when C9 picks.
+- **Opponent habits**: bans, picks and "banned against" for this game number of a series, or for all games, with sample sizes.
+- **Fearless pools**: each current player's most-played champions, struck through once Fearless or this draft removes them.
+
+Side and first pick are separate choices per game. Fearless locks every champion picked in earlier games for both teams; bans do not carry over. The series is saved in the browser, so a reload keeps it.
+
+## Data quality report
+
+```bash
+uv run python -m pipeline.checks
+```
+
 ## Tests
 
 ```bash

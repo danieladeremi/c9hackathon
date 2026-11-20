@@ -36,8 +36,8 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 - [x] Inspect one LoL feed: first and last envelopes, all event types, how draft actions, side and first-pick selection appear. Record findings in the design doc.
 - [x] Load `meta/` tables (games, rosters, teams, players, characters, tournaments).
 - [x] Extract per game: draft sequence in order (pick/ban, team, side, champion, phase), winner, patch, game number in series.
-- [ ] Extract per game per role: champion, player, gold and XP at 10/14/20 minutes; lane gold difference at 14.
-  - Done: per-player minute snapshots (gold, XP, level, CS, K/D/A, position) and roles inferred from lane position plus player history. Left: lane gold/XP difference views at 10/14/20 (SQL over `player_minutes`); 17 team-games (~0.5%) still lack a full role set.
+- [x] Extract per game per role: champion, player, gold and XP at 10/14/20 minutes; lane gold difference at 14.
+  - Done: per-player minute snapshots (gold, XP, level, CS, K/D/A, position) and roles inferred from lane position plus player history. Lane gold/XP/CS differences at 10/14/20 are in `lane_diffs`. 17 team-games (~0.5%) still lack a full role set.
 - [x] Extract team-state snapshots, one sampled per 5-minute window per game (features listed in the design doc).
 - [x] Handle the starter repo's caveats: rolled-back games (`series-!started-game`), missing games, team renames (join on IDs).
 - [x] Tests on a small synthetic feed (no real data in the repo).
@@ -48,15 +48,19 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 
 ## 2. Draft board and evidence layer (target 10 Dec)
 
-- [ ] Confirm current LCS 2026 rules: side vs first-pick selection, pick/ban order, Fearless rules per series length.
+- [x] Confirm current LCS 2026 rules: side vs first-pick selection, pick/ban order, Fearless rules per series length.
   - From the data: the first-pick team was on red side in 246 of 1,737 games, so side and first pick are separate choices; Fearless locks picks (not bans) for both teams across the series.
-- [ ] FastAPI service: draft state, legal actions, Fearless-excluded champions.
-- [ ] React + TypeScript UI (WebStorm): draft board for a Bo1/Bo3/Bo5 series.
+- [x] FastAPI service: draft state, legal actions, Fearless-excluded champions.
+- [x] React + TypeScript UI (WebStorm): draft board for a Bo1/Bo3/Bo5 series.
 - [ ] C9 Kia champion pools: seeded from pro games, editable by the coach.
-- [ ] Opponent tendencies: pick/ban frequency overall and by game number in series, with sample sizes.
+  - Seeded from pro games and shown per player with Fearless strike-through; coach editing not built yet.
+- [x] Opponent tendencies: pick/ban frequency overall and by game number in series, with sample sizes.
 - [ ] Lane matchups: gold difference at 14 by matchup, with sample sizes.
+  - API done (`/api/matchups`); not yet shown in the UI (planned for C9 pick slots once the enemy laner is known).
 
 **Done when:** a coach can step through a full Fearless Bo5 against a chosen opponent and see that opponent's tendencies at each step.
+
+**Status (20 Nov):** a full Fearless series can be stepped through end to end (checked in a headless browser: game 2 locks the 10 game-1 picks). The rules engine replays 739 of 740 real series; the one rejection is a feed anomaly. A baseline next-action predictor is shown for opponent slots; its hit rate is not measured yet.
 
 ## 3. Win-probability models and WPA (target 22 Dec)
 

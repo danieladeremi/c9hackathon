@@ -18,6 +18,7 @@ from pathlib import Path
 
 from .config import DATA_DIR, DB_PATH, WORK_DIR
 from .extract import extract_series
+from .derive import derive
 from .resolve import resolve_roles
 
 TABLES = ("games", "draft_actions", "player_games", "team_minutes", "player_minutes")
@@ -129,6 +130,8 @@ def build(limit: int | None = None, workers: int | None = None) -> None:
         con.execute(f"CREATE TABLE meta_{name} AS SELECT * FROM read_csv('{source}', header=true, all_varchar=true) WHERE title = 'lol'")
     series_csv = (DATA_DIR / "lol" / "series.csv").as_posix()
     con.execute(f"CREATE TABLE series AS SELECT * FROM read_csv('{series_csv}', header=true, all_varchar=true)")
+    if writers["games"] is not None:
+        derive(con)
     con.close()
     DB_PATH.unlink(missing_ok=True)
     tmp_db.rename(DB_PATH)

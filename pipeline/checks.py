@@ -50,8 +50,42 @@ CHECKS = {
 }
 
 
+def replay_drafts(con) -> None:
+    """Replay every real series through the planner's rules engine; any rejection is a rules bug."""
+    from planner.rules import DraftError, Game, Series
+
+    games = con.execute("""
+        SELECT g.series_id, g.game_id, g.blue_team_id, g.red_team_id, g.first_pick_team_id, g.winner_team_id,
+               list(d.champion_id ORDER BY d.seq) AS actions
+        FROM games g JOIN draft_actions d USING (game_id)
+        WHERE g.draft_action_count = 20
+        GROUP BY ALL ORDER BY g.series_id, min(g.started_at)
+    """).fetchall()
+    by_series: dict[str, list] = {}
+    for row in games:
+        by_series.setdefault(row[0], []).append(row)
+    ok, failures = 0, []
+    for series_id, rows in by_series.items():
+        teams = {rows[0][2], rows[0][3]}
+        a, b = sorted(teams)
+        series = Series(a, b, "bo5", [Game(r[2], r[3], r[4], [], r[5]) for r in rows])
+        try:
+            for index, r in enumerate(rows):
+                for champ in r[6]:
+                    series.apply(index, champ)
+            ok += 1
+        except DraftError as exc:
+            failures.append((series_id, str(exc)))
+    print("\n== rules engine replay of real drafts")
+    print(f"  series accepted: {ok}, rejected: {len(failures)}")
+    print("  (known: series 2754353 game 2 records slots 12/13 swapped in the feed, a data anomaly)")
+    for series_id, error in failures[:5]:
+        print(f"  {series_id}: {error}")
+
+
 def main() -> None:
     con = duckdb.connect(str(DB_PATH), read_only=True)
+    replay_drafts(con)
     for title, sql in CHECKS.items():
         print(f"\n== {title}")
         result = con.execute(sql)
