@@ -64,14 +64,17 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 
 ## 3. Win-probability models and WPA (target 22 Dec)
 
-- [ ] Team strength rating per team per split.
-- [ ] Pre-game model (team strength, side).
-- [ ] In-game model: logistic regression baseline, then small MLP. Split by game; hold out the most recent split.
-- [ ] Report accuracy, ECE and reliability diagrams per time window; keep the better-calibrated model.
-- [ ] WPA table per draft slot: `ΔW̄` overall and per phase, `W̄`, win rate, sample size, bootstrap interval, "not enough data" threshold.
+- [x] Team strength rating per team per split.
+- [x] Pre-game model (team strength, side).
+- [x] In-game model: logistic regression baseline, then small MLP. Split by game; hold out the most recent split.
+- [x] Report accuracy, ECE and reliability diagrams per time window; keep the better-calibrated model.
+- [x] WPA table per draft slot: `ΔW̄` overall and per phase, `W̄`, win rate, sample size, bootstrap interval, "not enough data" threshold.
 - [ ] Show the WPA table in the draft board for the current slot.
+  - Next: API endpoint over `data/winprob.duckdb` and a panel for C9 pick slots (lane gold vs the revealed enemy laner, early WPA, total WPA shrunk, evidence labels). Waits for Junie task 01 to merge (same files).
 
 **Done when:** for any slot in the draft, every eligible champion shows WPA with an interval or "not enough data", and the model's calibration report is in the repo.
+
+**Status (21 Nov):** `uv run python -m winprob.train` trains both models in ~25 s and writes `docs/results/winprob-report.md`. Elo by team (not by split), logistic regression chosen over the MLP. WPA uses empirical-Bayes shrinkage and reliability-based evidence labels instead of bootstrap intervals and a fixed threshold, because per-champion total WPA turned out to be mostly noise (see the design doc, "Model results"). Reliability diagrams are tables in the report for now; a chart can go in the UI or the write-up.
 
 ## 4. Series planner (target 31 Dec)
 

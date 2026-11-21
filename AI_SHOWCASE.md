@@ -39,3 +39,13 @@ The developer chose the idea and the category, approved each design change, and 
   with the data-licence rules and the laptop's memory limits.
 - Junie task 01 (`.junie/tasks/01-predictor-backtest.md`): measure the opponent-prediction hit rate on held-out games against a
   league-popularity baseline. *Result: pending.*
+
+### 21 Nov 2026: win-probability models (Claude Code, in PyCharm)
+- Built Elo team strength, a pre-game model and an in-game model (logistic regression against an MLP), trained on 2025 and
+  tested on the whole 2026 season. Logistic regression won on calibration, and the report says so.
+- **The model caught two data bugs the pipeline checks had missed**: 2025 feeds never record a generic dragon event, so the
+  dragon feature was zero for every training game; and Atakhan is recorded under a different name. Fixed and rebuilt.
+- **A result that changed the design**: a split-half test showed per-champion total WPA (and raw win rate) barely repeats
+  between random halves of the data, while lane gold at 14 minutes repeats strongly. Rather than ship a ranking of noise,
+  every figure is now shrunk by its measured reliability and labelled strong, some or weak evidence.
+- Kept away from the files Junie's task touches, so both could work at once.

@@ -12,13 +12,16 @@ from .roles import EARLY_END_S, EARLY_START_S, EarlyProfile, assign_roles
 
 JUNGLE_ITEM_MARKERS = ("jungle", "hatchling", "seedling", "scorchclaw")
 ROLE_SNAPSHOT_MINUTE = 10
+# Each column sums these GRID objective types. 2025 feeds only record the typed drakes (no
+# generic "slayDragon"), so drakes are counted by type to stay consistent across seasons.
 OBJECTIVE_COLUMNS = {
-    "slayDragon": "dragons_all",
-    "slayElderDragon": "elders",
-    "slayBaron": "barons",
-    "slayVoidGrub": "void_grubs",
-    "slayRiftHerald": "heralds",
-    "slayAtakhan": "atakhans",
+    "drakes": ("slayCloudDrake", "slayOceanDrake", "slayInfernalDrake", "slayMountainDrake",
+               "slayHextechDrake", "slayChemtechDrake"),
+    "elders": ("slayElderDragon",),
+    "barons": ("slayBaron",),
+    "void_grubs": ("slayVoidGrub",),
+    "heralds": ("slayRiftHerald",),
+    "atakhans": ("slayVoraciousAtakhan", "slayRuinousAtakhan", "slayAtakhan"),
 }
 
 
@@ -81,8 +84,8 @@ def _team_row(series_id: str, game: dict, team: dict, minute: int) -> dict[str, 
         "kills": team.get("kills") or 0,
         "deaths": team.get("deaths") or 0,
     }
-    for grid_type, column in OBJECTIVE_COLUMNS.items():
-        row[column] = _count_objective(team, grid_type)
+    for column, grid_types in OBJECTIVE_COLUMNS.items():
+        row[column] = sum(_count_objective(team, t) for t in grid_types)
     destroyed = defaultdict(int)
     for structure in game.get("structures") or []:
         if structure.get("destroyed") and structure.get("teamId") != team["id"]:

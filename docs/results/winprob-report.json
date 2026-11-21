@@ -1,0 +1,1209 @@
+{
+  "cutoff": "2026-01-01",
+  "games": {
+    "total": 1737,
+    "train": 1285,
+    "test": 452
+  },
+  "states": {
+    "total": 10574,
+    "train": 7788,
+    "test": 2786,
+    "sample_minutes": "every 5 minutes"
+  },
+  "pregame": {
+    "elo_k": 40,
+    "elo_break_shrink": 0.0,
+    "side_intercept": 0.2111,
+    "elo_coefficient": 2.3174,
+    "train_blue_win_rate": 0.5206,
+    "test": {
+      "n": 452,
+      "accuracy": 0.6438,
+      "log_loss": 0.6617,
+      "brier": 0.2309,
+      "ece": 0.0669,
+      "reliability": [
+        {
+          "bin_low": 0.0,
+          "bin_high": 0.1,
+          "mean_predicted": 0.0951,
+          "observed": 1.0,
+          "count": 1
+        },
+        {
+          "bin_low": 0.1,
+          "bin_high": 0.2,
+          "mean_predicted": 0.1559,
+          "observed": 0.25,
+          "count": 16
+        },
+        {
+          "bin_low": 0.2,
+          "bin_high": 0.3,
+          "mean_predicted": 0.2621,
+          "observed": 0.3333,
+          "count": 30
+        },
+        {
+          "bin_low": 0.3,
+          "bin_high": 0.4,
+          "mean_predicted": 0.3466,
+          "observed": 0.2885,
+          "count": 52
+        },
+        {
+          "bin_low": 0.4,
+          "bin_high": 0.5,
+          "mean_predicted": 0.4527,
+          "observed": 0.4655,
+          "count": 58
+        },
+        {
+          "bin_low": 0.5,
+          "bin_high": 0.6,
+          "mean_predicted": 0.5463,
+          "observed": 0.5556,
+          "count": 72
+        },
+        {
+          "bin_low": 0.6,
+          "bin_high": 0.7,
+          "mean_predicted": 0.6505,
+          "observed": 0.6947,
+          "count": 95
+        },
+        {
+          "bin_low": 0.7,
+          "bin_high": 0.8,
+          "mean_predicted": 0.7469,
+          "observed": 0.6571,
+          "count": 70
+        },
+        {
+          "bin_low": 0.8,
+          "bin_high": 0.9,
+          "mean_predicted": 0.8475,
+          "observed": 0.6735,
+          "count": 49
+        },
+        {
+          "bin_low": 0.9,
+          "bin_high": 1.0,
+          "mean_predicted": 0.9139,
+          "observed": 0.6667,
+          "count": 9
+        }
+      ]
+    },
+    "test_baseline_blue_rate": {
+      "n": 452,
+      "accuracy": 0.5487,
+      "log_loss": 0.69,
+      "brier": 0.2484,
+      "ece": 0.028,
+      "reliability": [
+        {
+          "bin_low": 0.5,
+          "bin_high": 0.6,
+          "mean_predicted": 0.5206,
+          "observed": 0.5487,
+          "count": 452
+        }
+      ]
+    }
+  },
+  "ingame": {
+    "logistic_regression": {
+      "test": {
+        "n": 2786,
+        "accuracy": 0.7455,
+        "log_loss": 0.5089,
+        "brier": 0.1703,
+        "ece": 0.0403,
+        "reliability": [
+          {
+            "bin_low": 0.0,
+            "bin_high": 0.067,
+            "mean_predicted": 0.0261,
+            "observed": 0.016,
+            "count": 250
+          },
+          {
+            "bin_low": 0.067,
+            "bin_high": 0.133,
+            "mean_predicted": 0.1018,
+            "observed": 0.1439,
+            "count": 139
+          },
+          {
+            "bin_low": 0.133,
+            "bin_high": 0.2,
+            "mean_predicted": 0.1669,
+            "observed": 0.1463,
+            "count": 123
+          },
+          {
+            "bin_low": 0.2,
+            "bin_high": 0.267,
+            "mean_predicted": 0.2369,
+            "observed": 0.2783,
+            "count": 115
+          },
+          {
+            "bin_low": 0.267,
+            "bin_high": 0.333,
+            "mean_predicted": 0.3007,
+            "observed": 0.3228,
+            "count": 127
+          },
+          {
+            "bin_low": 0.333,
+            "bin_high": 0.4,
+            "mean_predicted": 0.3619,
+            "observed": 0.4231,
+            "count": 130
+          },
+          {
+            "bin_low": 0.4,
+            "bin_high": 0.467,
+            "mean_predicted": 0.4322,
+            "observed": 0.4286,
+            "count": 147
+          },
+          {
+            "bin_low": 0.467,
+            "bin_high": 0.533,
+            "mean_predicted": 0.4981,
+            "observed": 0.4935,
+            "count": 154
+          },
+          {
+            "bin_low": 0.533,
+            "bin_high": 0.6,
+            "mean_predicted": 0.5686,
+            "observed": 0.5531,
+            "count": 179
+          },
+          {
+            "bin_low": 0.6,
+            "bin_high": 0.667,
+            "mean_predicted": 0.6327,
+            "observed": 0.6303,
+            "count": 165
+          },
+          {
+            "bin_low": 0.667,
+            "bin_high": 0.733,
+            "mean_predicted": 0.7002,
+            "observed": 0.6313,
+            "count": 217
+          },
+          {
+            "bin_low": 0.733,
+            "bin_high": 0.8,
+            "mean_predicted": 0.7674,
+            "observed": 0.7233,
+            "count": 206
+          },
+          {
+            "bin_low": 0.8,
+            "bin_high": 0.867,
+            "mean_predicted": 0.8341,
+            "observed": 0.725,
+            "count": 200
+          },
+          {
+            "bin_low": 0.867,
+            "bin_high": 0.933,
+            "mean_predicted": 0.9017,
+            "observed": 0.8417,
+            "count": 240
+          },
+          {
+            "bin_low": 0.933,
+            "bin_high": 1.0,
+            "mean_predicted": 0.9723,
+            "observed": 0.9188,
+            "count": 394
+          }
+        ]
+      },
+      "by_window": {
+        "0-15 min": {
+          "n": 1356,
+          "accuracy": 0.6984,
+          "log_loss": 0.5821,
+          "brier": 0.1992,
+          "ece": 0.0474,
+          "reliability": [
+            {
+              "bin_low": 0.0,
+              "bin_high": 0.067,
+              "mean_predicted": 0.0356,
+              "observed": 0.0286,
+              "count": 35
+            },
+            {
+              "bin_low": 0.067,
+              "bin_high": 0.133,
+              "mean_predicted": 0.1078,
+              "observed": 0.1569,
+              "count": 51
+            },
+            {
+              "bin_low": 0.133,
+              "bin_high": 0.2,
+              "mean_predicted": 0.1664,
+              "observed": 0.2,
+              "count": 60
+            },
+            {
+              "bin_low": 0.2,
+              "bin_high": 0.267,
+              "mean_predicted": 0.2393,
+              "observed": 0.2581,
+              "count": 62
+            },
+            {
+              "bin_low": 0.267,
+              "bin_high": 0.333,
+              "mean_predicted": 0.3024,
+              "observed": 0.2143,
+              "count": 70
+            },
+            {
+              "bin_low": 0.333,
+              "bin_high": 0.4,
+              "mean_predicted": 0.3629,
+              "observed": 0.4578,
+              "count": 83
+            },
+            {
+              "bin_low": 0.4,
+              "bin_high": 0.467,
+              "mean_predicted": 0.4338,
+              "observed": 0.4253,
+              "count": 87
+            },
+            {
+              "bin_low": 0.467,
+              "bin_high": 0.533,
+              "mean_predicted": 0.4991,
+              "observed": 0.4608,
+              "count": 102
+            },
+            {
+              "bin_low": 0.533,
+              "bin_high": 0.6,
+              "mean_predicted": 0.5699,
+              "observed": 0.5847,
+              "count": 118
+            },
+            {
+              "bin_low": 0.6,
+              "bin_high": 0.667,
+              "mean_predicted": 0.6342,
+              "observed": 0.6316,
+              "count": 114
+            },
+            {
+              "bin_low": 0.667,
+              "bin_high": 0.733,
+              "mean_predicted": 0.7001,
+              "observed": 0.6214,
+              "count": 140
+            },
+            {
+              "bin_low": 0.733,
+              "bin_high": 0.8,
+              "mean_predicted": 0.7682,
+              "observed": 0.7299,
+              "count": 137
+            },
+            {
+              "bin_low": 0.8,
+              "bin_high": 0.867,
+              "mean_predicted": 0.8335,
+              "observed": 0.7295,
+              "count": 122
+            },
+            {
+              "bin_low": 0.867,
+              "bin_high": 0.933,
+              "mean_predicted": 0.9009,
+              "observed": 0.8624,
+              "count": 109
+            },
+            {
+              "bin_low": 0.933,
+              "bin_high": 1.0,
+              "mean_predicted": 0.9618,
+              "observed": 0.8939,
+              "count": 66
+            }
+          ]
+        },
+        "15-25 min": {
+          "n": 879,
+          "accuracy": 0.7941,
+          "log_loss": 0.4449,
+          "brier": 0.1435,
+          "ece": 0.0489,
+          "reliability": [
+            {
+              "bin_low": 0.0,
+              "bin_high": 0.067,
+              "mean_predicted": 0.024,
+              "observed": 0.0169,
+              "count": 118
+            },
+            {
+              "bin_low": 0.067,
+              "bin_high": 0.133,
+              "mean_predicted": 0.0961,
+              "observed": 0.1489,
+              "count": 47
+            },
+            {
+              "bin_low": 0.133,
+              "bin_high": 0.2,
+              "mean_predicted": 0.1664,
+              "observed": 0.0889,
+              "count": 45
+            },
+            {
+              "bin_low": 0.2,
+              "bin_high": 0.267,
+              "mean_predicted": 0.2383,
+              "observed": 0.303,
+              "count": 33
+            },
+            {
+              "bin_low": 0.267,
+              "bin_high": 0.333,
+              "mean_predicted": 0.2996,
+              "observed": 0.3333,
+              "count": 36
+            },
+            {
+              "bin_low": 0.333,
+              "bin_high": 0.4,
+              "mean_predicted": 0.361,
+              "observed": 0.3929,
+              "count": 28
+            },
+            {
+              "bin_low": 0.4,
+              "bin_high": 0.467,
+              "mean_predicted": 0.431,
+              "observed": 0.4103,
+              "count": 39
+            },
+            {
+              "bin_low": 0.467,
+              "bin_high": 0.533,
+              "mean_predicted": 0.4919,
+              "observed": 0.5625,
+              "count": 32
+            },
+            {
+              "bin_low": 0.533,
+              "bin_high": 0.6,
+              "mean_predicted": 0.566,
+              "observed": 0.5714,
+              "count": 35
+            },
+            {
+              "bin_low": 0.6,
+              "bin_high": 0.667,
+              "mean_predicted": 0.6309,
+              "observed": 0.5946,
+              "count": 37
+            },
+            {
+              "bin_low": 0.667,
+              "bin_high": 0.733,
+              "mean_predicted": 0.7015,
+              "observed": 0.7255,
+              "count": 51
+            },
+            {
+              "bin_low": 0.733,
+              "bin_high": 0.8,
+              "mean_predicted": 0.7664,
+              "observed": 0.6889,
+              "count": 45
+            },
+            {
+              "bin_low": 0.8,
+              "bin_high": 0.867,
+              "mean_predicted": 0.8359,
+              "observed": 0.72,
+              "count": 50
+            },
+            {
+              "bin_low": 0.867,
+              "bin_high": 0.933,
+              "mean_predicted": 0.9039,
+              "observed": 0.8276,
+              "count": 87
+            },
+            {
+              "bin_low": 0.933,
+              "bin_high": 1.0,
+              "mean_predicted": 0.9755,
+              "observed": 0.9235,
+              "count": 196
+            }
+          ]
+        },
+        "25+ min": {
+          "n": 551,
+          "accuracy": 0.784,
+          "log_loss": 0.431,
+          "brier": 0.142,
+          "ece": 0.0729,
+          "reliability": [
+            {
+              "bin_low": 0.0,
+              "bin_high": 0.067,
+              "mean_predicted": 0.0251,
+              "observed": 0.0103,
+              "count": 97
+            },
+            {
+              "bin_low": 0.067,
+              "bin_high": 0.133,
+              "mean_predicted": 0.1007,
+              "observed": 0.122,
+              "count": 41
+            },
+            {
+              "bin_low": 0.133,
+              "bin_high": 0.2,
+              "mean_predicted": 0.1701,
+              "observed": 0.1111,
+              "count": 18
+            },
+            {
+              "bin_low": 0.2,
+              "bin_high": 0.267,
+              "mean_predicted": 0.2274,
+              "observed": 0.3,
+              "count": 20
+            },
+            {
+              "bin_low": 0.267,
+              "bin_high": 0.333,
+              "mean_predicted": 0.2972,
+              "observed": 0.6667,
+              "count": 21
+            },
+            {
+              "bin_low": 0.333,
+              "bin_high": 0.4,
+              "mean_predicted": 0.3588,
+              "observed": 0.3158,
+              "count": 19
+            },
+            {
+              "bin_low": 0.4,
+              "bin_high": 0.467,
+              "mean_predicted": 0.4277,
+              "observed": 0.4762,
+              "count": 21
+            },
+            {
+              "bin_low": 0.467,
+              "bin_high": 0.533,
+              "mean_predicted": 0.503,
+              "observed": 0.55,
+              "count": 20
+            },
+            {
+              "bin_low": 0.533,
+              "bin_high": 0.6,
+              "mean_predicted": 0.5666,
+              "observed": 0.3846,
+              "count": 26
+            },
+            {
+              "bin_low": 0.6,
+              "bin_high": 0.667,
+              "mean_predicted": 0.6255,
+              "observed": 0.7143,
+              "count": 14
+            },
+            {
+              "bin_low": 0.667,
+              "bin_high": 0.733,
+              "mean_predicted": 0.6983,
+              "observed": 0.5,
+              "count": 26
+            },
+            {
+              "bin_low": 0.733,
+              "bin_high": 0.8,
+              "mean_predicted": 0.7651,
+              "observed": 0.75,
+              "count": 24
+            },
+            {
+              "bin_low": 0.8,
+              "bin_high": 0.867,
+              "mean_predicted": 0.8333,
+              "observed": 0.7143,
+              "count": 28
+            },
+            {
+              "bin_low": 0.867,
+              "bin_high": 0.933,
+              "mean_predicted": 0.8995,
+              "observed": 0.8182,
+              "count": 44
+            },
+            {
+              "bin_low": 0.933,
+              "bin_high": 1.0,
+              "mean_predicted": 0.9727,
+              "observed": 0.9242,
+              "count": 132
+            }
+          ]
+        }
+      }
+    },
+    "mlp": {
+      "test": {
+        "n": 2786,
+        "accuracy": 0.7462,
+        "log_loss": 0.5159,
+        "brier": 0.1716,
+        "ece": 0.048,
+        "reliability": [
+          {
+            "bin_low": 0.0,
+            "bin_high": 0.067,
+            "mean_predicted": 0.0322,
+            "observed": 0.0085,
+            "count": 234
+          },
+          {
+            "bin_low": 0.067,
+            "bin_high": 0.133,
+            "mean_predicted": 0.0995,
+            "observed": 0.0935,
+            "count": 139
+          },
+          {
+            "bin_low": 0.133,
+            "bin_high": 0.2,
+            "mean_predicted": 0.1686,
+            "observed": 0.2153,
+            "count": 144
+          },
+          {
+            "bin_low": 0.2,
+            "bin_high": 0.267,
+            "mean_predicted": 0.2337,
+            "observed": 0.2336,
+            "count": 137
+          },
+          {
+            "bin_low": 0.267,
+            "bin_high": 0.333,
+            "mean_predicted": 0.3011,
+            "observed": 0.3727,
+            "count": 161
+          },
+          {
+            "bin_low": 0.333,
+            "bin_high": 0.4,
+            "mean_predicted": 0.3675,
+            "observed": 0.4188,
+            "count": 117
+          },
+          {
+            "bin_low": 0.4,
+            "bin_high": 0.467,
+            "mean_predicted": 0.4332,
+            "observed": 0.431,
+            "count": 116
+          },
+          {
+            "bin_low": 0.467,
+            "bin_high": 0.533,
+            "mean_predicted": 0.4995,
+            "observed": 0.5241,
+            "count": 145
+          },
+          {
+            "bin_low": 0.533,
+            "bin_high": 0.6,
+            "mean_predicted": 0.5657,
+            "observed": 0.5338,
+            "count": 148
+          },
+          {
+            "bin_low": 0.6,
+            "bin_high": 0.667,
+            "mean_predicted": 0.6335,
+            "observed": 0.6174,
+            "count": 149
+          },
+          {
+            "bin_low": 0.667,
+            "bin_high": 0.733,
+            "mean_predicted": 0.7027,
+            "observed": 0.6859,
+            "count": 191
+          },
+          {
+            "bin_low": 0.733,
+            "bin_high": 0.8,
+            "mean_predicted": 0.7666,
+            "observed": 0.6842,
+            "count": 228
+          },
+          {
+            "bin_low": 0.8,
+            "bin_high": 0.867,
+            "mean_predicted": 0.8354,
+            "observed": 0.7534,
+            "count": 223
+          },
+          {
+            "bin_low": 0.867,
+            "bin_high": 0.933,
+            "mean_predicted": 0.9019,
+            "observed": 0.7878,
+            "count": 245
+          },
+          {
+            "bin_low": 0.933,
+            "bin_high": 1.0,
+            "mean_predicted": 0.9752,
+            "observed": 0.9169,
+            "count": 409
+          }
+        ]
+      },
+      "by_window": {
+        "0-15 min": {
+          "n": 1356,
+          "accuracy": 0.6836,
+          "log_loss": 0.5994,
+          "brier": 0.2044,
+          "ece": 0.0581,
+          "reliability": [
+            {
+              "bin_low": 0.0,
+              "bin_high": 0.067,
+              "mean_predicted": 0.0455,
+              "observed": 0.0,
+              "count": 25
+            },
+            {
+              "bin_low": 0.067,
+              "bin_high": 0.133,
+              "mean_predicted": 0.105,
+              "observed": 0.1373,
+              "count": 51
+            },
+            {
+              "bin_low": 0.133,
+              "bin_high": 0.2,
+              "mean_predicted": 0.168,
+              "observed": 0.1972,
+              "count": 71
+            },
+            {
+              "bin_low": 0.2,
+              "bin_high": 0.267,
+              "mean_predicted": 0.2339,
+              "observed": 0.2267,
+              "count": 75
+            },
+            {
+              "bin_low": 0.267,
+              "bin_high": 0.333,
+              "mean_predicted": 0.3027,
+              "observed": 0.3263,
+              "count": 95
+            },
+            {
+              "bin_low": 0.333,
+              "bin_high": 0.4,
+              "mean_predicted": 0.3679,
+              "observed": 0.5085,
+              "count": 59
+            },
+            {
+              "bin_low": 0.4,
+              "bin_high": 0.467,
+              "mean_predicted": 0.4341,
+              "observed": 0.4306,
+              "count": 72
+            },
+            {
+              "bin_low": 0.467,
+              "bin_high": 0.533,
+              "mean_predicted": 0.4991,
+              "observed": 0.5114,
+              "count": 88
+            },
+            {
+              "bin_low": 0.533,
+              "bin_high": 0.6,
+              "mean_predicted": 0.5635,
+              "observed": 0.5155,
+              "count": 97
+            },
+            {
+              "bin_low": 0.6,
+              "bin_high": 0.667,
+              "mean_predicted": 0.6351,
+              "observed": 0.5789,
+              "count": 95
+            },
+            {
+              "bin_low": 0.667,
+              "bin_high": 0.733,
+              "mean_predicted": 0.7024,
+              "observed": 0.6406,
+              "count": 128
+            },
+            {
+              "bin_low": 0.733,
+              "bin_high": 0.8,
+              "mean_predicted": 0.7671,
+              "observed": 0.6901,
+              "count": 142
+            },
+            {
+              "bin_low": 0.8,
+              "bin_high": 0.867,
+              "mean_predicted": 0.835,
+              "observed": 0.7677,
+              "count": 155
+            },
+            {
+              "bin_low": 0.867,
+              "bin_high": 0.933,
+              "mean_predicted": 0.9023,
+              "observed": 0.7576,
+              "count": 132
+            },
+            {
+              "bin_low": 0.933,
+              "bin_high": 1.0,
+              "mean_predicted": 0.96,
+              "observed": 0.9155,
+              "count": 71
+            }
+          ]
+        },
+        "15-25 min": {
+          "n": 879,
+          "accuracy": 0.7952,
+          "log_loss": 0.4553,
+          "brier": 0.1468,
+          "ece": 0.0614,
+          "reliability": [
+            {
+              "bin_low": 0.0,
+              "bin_high": 0.067,
+              "mean_predicted": 0.029,
+              "observed": 0.0,
+              "count": 95
+            },
+            {
+              "bin_low": 0.067,
+              "bin_high": 0.133,
+              "mean_predicted": 0.0991,
+              "observed": 0.0702,
+              "count": 57
+            },
+            {
+              "bin_low": 0.133,
+              "bin_high": 0.2,
+              "mean_predicted": 0.1671,
+              "observed": 0.2115,
+              "count": 52
+            },
+            {
+              "bin_low": 0.2,
+              "bin_high": 0.267,
+              "mean_predicted": 0.2371,
+              "observed": 0.2093,
+              "count": 43
+            },
+            {
+              "bin_low": 0.267,
+              "bin_high": 0.333,
+              "mean_predicted": 0.2943,
+              "observed": 0.4615,
+              "count": 39
+            },
+            {
+              "bin_low": 0.333,
+              "bin_high": 0.4,
+              "mean_predicted": 0.3657,
+              "observed": 0.3333,
+              "count": 36
+            },
+            {
+              "bin_low": 0.4,
+              "bin_high": 0.467,
+              "mean_predicted": 0.4295,
+              "observed": 0.3793,
+              "count": 29
+            },
+            {
+              "bin_low": 0.467,
+              "bin_high": 0.533,
+              "mean_predicted": 0.4995,
+              "observed": 0.5429,
+              "count": 35
+            },
+            {
+              "bin_low": 0.533,
+              "bin_high": 0.6,
+              "mean_predicted": 0.5676,
+              "observed": 0.6061,
+              "count": 33
+            },
+            {
+              "bin_low": 0.6,
+              "bin_high": 0.667,
+              "mean_predicted": 0.6302,
+              "observed": 0.7027,
+              "count": 37
+            },
+            {
+              "bin_low": 0.667,
+              "bin_high": 0.733,
+              "mean_predicted": 0.7023,
+              "observed": 0.7381,
+              "count": 42
+            },
+            {
+              "bin_low": 0.733,
+              "bin_high": 0.8,
+              "mean_predicted": 0.7675,
+              "observed": 0.6364,
+              "count": 55
+            },
+            {
+              "bin_low": 0.8,
+              "bin_high": 0.867,
+              "mean_predicted": 0.8369,
+              "observed": 0.7347,
+              "count": 49
+            },
+            {
+              "bin_low": 0.867,
+              "bin_high": 0.933,
+              "mean_predicted": 0.9022,
+              "observed": 0.8442,
+              "count": 77
+            },
+            {
+              "bin_low": 0.933,
+              "bin_high": 1.0,
+              "mean_predicted": 0.9763,
+              "observed": 0.91,
+              "count": 200
+            }
+          ]
+        },
+        "25+ min": {
+          "n": 551,
+          "accuracy": 0.8221,
+          "log_loss": 0.4072,
+          "brier": 0.1301,
+          "ece": 0.0599,
+          "reliability": [
+            {
+              "bin_low": 0.0,
+              "bin_high": 0.067,
+              "mean_predicted": 0.0318,
+              "observed": 0.0175,
+              "count": 114
+            },
+            {
+              "bin_low": 0.067,
+              "bin_high": 0.133,
+              "mean_predicted": 0.0911,
+              "observed": 0.0645,
+              "count": 31
+            },
+            {
+              "bin_low": 0.133,
+              "bin_high": 0.2,
+              "mean_predicted": 0.1743,
+              "observed": 0.2857,
+              "count": 21
+            },
+            {
+              "bin_low": 0.2,
+              "bin_high": 0.267,
+              "mean_predicted": 0.2249,
+              "observed": 0.3158,
+              "count": 19
+            },
+            {
+              "bin_low": 0.267,
+              "bin_high": 0.333,
+              "mean_predicted": 0.3054,
+              "observed": 0.4074,
+              "count": 27
+            },
+            {
+              "bin_low": 0.333,
+              "bin_high": 0.4,
+              "mean_predicted": 0.3695,
+              "observed": 0.3182,
+              "count": 22
+            },
+            {
+              "bin_low": 0.4,
+              "bin_high": 0.467,
+              "mean_predicted": 0.4358,
+              "observed": 0.5333,
+              "count": 15
+            },
+            {
+              "bin_low": 0.467,
+              "bin_high": 0.533,
+              "mean_predicted": 0.501,
+              "observed": 0.5455,
+              "count": 22
+            },
+            {
+              "bin_low": 0.533,
+              "bin_high": 0.6,
+              "mean_predicted": 0.5744,
+              "observed": 0.5,
+              "count": 18
+            },
+            {
+              "bin_low": 0.6,
+              "bin_high": 0.667,
+              "mean_predicted": 0.6314,
+              "observed": 0.6471,
+              "count": 17
+            },
+            {
+              "bin_low": 0.667,
+              "bin_high": 0.733,
+              "mean_predicted": 0.7054,
+              "observed": 0.8571,
+              "count": 21
+            },
+            {
+              "bin_low": 0.733,
+              "bin_high": 0.8,
+              "mean_predicted": 0.7628,
+              "observed": 0.7419,
+              "count": 31
+            },
+            {
+              "bin_low": 0.8,
+              "bin_high": 0.867,
+              "mean_predicted": 0.8349,
+              "observed": 0.6842,
+              "count": 19
+            },
+            {
+              "bin_low": 0.867,
+              "bin_high": 0.933,
+              "mean_predicted": 0.9001,
+              "observed": 0.7778,
+              "count": 36
+            },
+            {
+              "bin_low": 0.933,
+              "bin_high": 1.0,
+              "mean_predicted": 0.9814,
+              "observed": 0.9275,
+              "count": 138
+            }
+          ]
+        }
+      }
+    }
+  },
+  "chosen_model": "logistic_regression",
+  "verdict": "The MLP does not beat logistic regression on held-out calibration, so logistic regression is used.",
+  "logistic_regression_coefficients_standardized": {
+    "minute_scaled": 0.0229,
+    "gold_diff_k": 2.2696,
+    "gold_x_time": -1.5775,
+    "xp_diff_k": 0.4661,
+    "kills_diff": 0.3202,
+    "towers_diff": 0.0061,
+    "inhibitors_diff": 0.1176,
+    "dragons_diff": 0.5318,
+    "soul_diff": 0.1359,
+    "elders_diff": 0.0685,
+    "barons_diff": 0.0202,
+    "void_grubs_diff": 0.0989,
+    "heralds_diff": 0.0063,
+    "atakhans_diff": -0.0304,
+    "pregame_logit": 0.708
+  },
+  "wpa": {
+    "team_games": 3474,
+    "games_skipped_missing_states": 0,
+    "champion_roles": 322,
+    "reliability": {
+      "early": {
+        "random_halves": {
+          "correlation": 0.309,
+          "groups": 69
+        },
+        "by_season": {
+          "correlation": 0.423,
+          "groups": 53
+        }
+      },
+      "mid": {
+        "random_halves": {
+          "correlation": 0.07,
+          "groups": 69
+        },
+        "by_season": {
+          "correlation": 0.103,
+          "groups": 53
+        }
+      },
+      "late": {
+        "random_halves": {
+          "correlation": 0.106,
+          "groups": 69
+        },
+        "by_season": {
+          "correlation": 0.09,
+          "groups": 53
+        }
+      },
+      "total": {
+        "random_halves": {
+          "correlation": 0.252,
+          "groups": 68
+        },
+        "by_season": {
+          "correlation": 0.183,
+          "groups": 53
+        }
+      },
+      "win": {
+        "random_halves": {
+          "correlation": 0.234,
+          "groups": 70
+        },
+        "by_season": {
+          "correlation": 0.179,
+          "groups": 53
+        }
+      },
+      "lane_gold14": {
+        "random_halves": {
+          "correlation": 0.731,
+          "groups": 69
+        },
+        "by_season": {
+          "correlation": 0.714,
+          "groups": 53
+        }
+      }
+    },
+    "true_effect_sd_by_role": {
+      "support": {
+        "early": 0.0362,
+        "mid": 0.0,
+        "late": 0.0413,
+        "total": 0.0,
+        "win": 0.0,
+        "lane_gold14": 108.161
+      },
+      "bot": {
+        "early": 0.019,
+        "mid": 0.0,
+        "late": 0.0227,
+        "total": 0.0473,
+        "win": 0.0701,
+        "lane_gold14": 64.8254
+      },
+      "top": {
+        "early": 0.0,
+        "mid": 0.0,
+        "late": 0.0722,
+        "total": 0.0,
+        "win": 0.0,
+        "lane_gold14": 272.9143
+      },
+      "mid": {
+        "early": 0.0146,
+        "mid": 0.0,
+        "late": 0.0,
+        "total": 0.0,
+        "win": 0.0,
+        "lane_gold14": 221.952
+      },
+      "jungle": {
+        "early": 0.0406,
+        "mid": 0.0,
+        "late": 0.0,
+        "total": 0.0,
+        "win": 0.0,
+        "lane_gold14": 207.3799
+      }
+    },
+    "evidence_counts": {
+      "early": {
+        "strong": 39,
+        "some": 35,
+        "weak": 248
+      },
+      "mid": {
+        "strong": 0,
+        "some": 0,
+        "weak": 322
+      },
+      "late": {
+        "strong": 0,
+        "some": 0,
+        "weak": 322
+      },
+      "total": {
+        "strong": 0,
+        "some": 0,
+        "weak": 322
+      },
+      "win": {
+        "strong": 0,
+        "some": 0,
+        "weak": 322
+      },
+      "lane_gold14": {
+        "strong": 105,
+        "some": 76,
+        "weak": 140
+      }
+    },
+    "evidence_cutoffs": {
+      "strong": 0.6,
+      "some": 0.3
+    },
+    "min_metric_reliability": 0.3,
+    "gated_metrics": [
+      "mid",
+      "late",
+      "total",
+      "win"
+    ]
+  }
+}

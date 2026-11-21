@@ -13,7 +13,7 @@ need to know how far to trust it. The design promises a measured hit rate shown 
    Existing callers keep working unchanged.
 
 2. **`planner/backtest.py`**, runnable as `uv run python -m planner.backtest`.
-   - Test set: every complete draft (`draft_action_count = 20`) with `game_date >= 2026-06-01`. Make the cutoff a CLI option.
+   - Test set: every complete draft (`draft_action_count = 20`) with `game_date >= 2026-01-01` (the whole 2026 season, the same holdout as the win-probability models). Make the cutoff a CLI option.
    - For each test game and each of its 20 slots: the acting team and action come from the real draft. Compute
      `predict_next(..., before=<that game's date>)`, where `unavailable` holds the champions already banned or picked earlier
      in that game plus the Fearless locks (champions picked in earlier games of the same series; use `planner.rules`).
