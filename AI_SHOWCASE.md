@@ -80,5 +80,6 @@ The developer chose the idea and the category, approved each design change, and 
   with a pass mark: champion estimates from 2025 only, cross-fitted, evaluated on the 2026 season against side + team strength.
 - Result: the draft adds nothing measurable. A power check showed the test could have seen a ~5-point effect, so this is a real null,
   not a small sample. The projected lane gold does show up at 14 minutes (slope 1.05), but lanes do not decide pro games on their own.
-- Decision, made with the developer: no moving bar. Show the pre-game chance and the projected lanes, and put the test in the write-up.
+- Decision, by the kill criterion agreed with the developer before the test ran: no moving bar. Show the pre-game chance and the
+  projected lanes, and put the test in the write-up.
 

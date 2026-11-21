@@ -102,7 +102,7 @@ Full numbers: [docs/results/draft-eval.md](../results/draft-eval.md) (`uv run py
 - **What does hold:** projected lane gold predicts the real gold lead at 14 minutes with a slope of 1.05 (calibrated), but only
   r = 0.16: lanes go the way the draft says on average, then the game is decided elsewhere (lane-strong champions trade off scaling,
   and pro teams draft around their weak lanes).
-- **Product decision:** no moving bar (it would be noise dressed as insight). The board shows the pre-game win chance (side + team
+- **Product decision** (by the kill criterion agreed before the test): no moving bar (it would be noise dressed as insight). The board shows the pre-game win chance (side + team
   strength) and the projected lane gold per role as the draft fills in, labelled as an early-game projection, not a result forecast.
   This test is part of the methodology write-up: it is the evidence that the tool does not overclaim.
 
