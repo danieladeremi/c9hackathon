@@ -1,0 +1,91 @@
+{
+  "cutoff": "2026-01-01",
+  "games": {
+    "train": 1272,
+    "test": 448
+  },
+  "models": {
+    "M0 pre-game only": {
+      "n": 448,
+      "accuracy": 0.6451,
+      "log_loss": 0.6634,
+      "brier": 0.2307,
+      "ece": 0.0645
+    },
+    "M1 pre-game + projected lane gold": {
+      "n": 448,
+      "accuracy": 0.6429,
+      "log_loss": 0.6635,
+      "brier": 0.2307,
+      "ece": 0.0742
+    },
+    "M2 pre-game + champion WPA": {
+      "n": 448,
+      "accuracy": 0.6473,
+      "log_loss": 0.664,
+      "brier": 0.2309,
+      "ece": 0.067
+    },
+    "M3 draft only (projected lane gold)": {
+      "n": 448,
+      "accuracy": 0.5536,
+      "log_loss": 0.6896,
+      "brier": 0.2482,
+      "ece": 0.0323
+    }
+  },
+  "coefficients_with_intercept": {
+    "M0 pre-game only": [
+      1.0619,
+      -0.0014
+    ],
+    "M1 pre-game + projected lane gold": [
+      1.0651,
+      -0.086,
+      -0.0023
+    ],
+    "M2 pre-game + champion WPA": [
+      1.0639,
+      0.6105,
+      -0.0001
+    ],
+    "M3 draft only (projected lane gold)": [
+      0.0375,
+      0.0853
+    ]
+  },
+  "vs_pregame": {
+    "M1 pre-game + projected lane gold": {
+      "log_loss_improvement": -6e-05,
+      "ci90": [
+        -0.00108,
+        0.00097
+      ],
+      "significant": false
+    },
+    "M2 pre-game + champion WPA": {
+      "log_loss_improvement": -0.00055,
+      "ci90": [
+        -0.00123,
+        0.00018
+      ],
+      "significant": false
+    }
+  },
+  "projected_lane_gold_vs_real_gold_at_14": {
+    "games": 448,
+    "correlation": 0.159,
+    "slope_real_per_projected": 1.048,
+    "projected_sd": 321.2,
+    "real_sd": 2113.5
+  },
+  "typical_bar_move_points": -0.7,
+  "power_check": {
+    "win_logit_per_1k_real_gold_at_14": 0.666,
+    "chained_bar_move_points": 5.3,
+    "chained_expected_log_loss_gain": 0.00571,
+    "chained_effect_ruled_out": true
+  },
+  "passed": false,
+  "verdict": "The draft does not add a measurable held-out improvement over team strength: no moving bar. Show the pre-game number and the projected lane table instead. The test had the power to see the effect a projected gold lead would have if it converted like a real one, and rules it out: draft lane advantages show up at 14 minutes but do not turn into wins."
+}

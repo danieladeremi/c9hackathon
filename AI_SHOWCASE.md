@@ -75,3 +75,10 @@ The developer chose the idea and the category, approved each design change, and 
 - Worked alongside Junie's task 02 in the same checkout: Claude's commit included only its own files, leaving Junie's in-progress
   `stats.py` and `backtest.py` changes untouched for review.
 
+### 22 Nov 2026: the live win bar, tested before it was built (Claude Code)
+- The developer asked how effective a live win-probability bar would be. Instead of building it, Claude wrote a pre-registered test
+  with a pass mark: champion estimates from 2025 only, cross-fitted, evaluated on the 2026 season against side + team strength.
+- Result: the draft adds nothing measurable. A power check showed the test could have seen a ~5-point effect, so this is a real null,
+  not a small sample. The projected lane gold does show up at 14 minutes (slope 1.05), but lanes do not decide pro games on their own.
+- Decision, made with the developer: no moving bar. Show the pre-game chance and the projected lanes, and put the test in the write-up.
+

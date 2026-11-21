@@ -88,6 +88,24 @@ Full numbers: [docs/results/winprob-report.md](../results/winprob-report.md), re
   which the reliability check showed are mostly noise at pro sample sizes. The tool states what it can back instead: how likely the
   opponent is to rely on a champion later, and who on their roster plays it.
 
+## Live win-probability bar: tested, not shipped as a moving bar (2026-11-22)
+
+Full numbers: [docs/results/draft-eval.md](../results/draft-eval.md) (`uv run python -m winprob.draft_eval`).
+
+- **Test:** score every 2026 game from its draft, with champion estimates learned from 2025 only (cross-fitted for the 2025 rows),
+  and ask whether the draft improves on side + team strength. Pass mark: a held-out log-loss gain whose 90% paired bootstrap
+  interval excludes zero.
+- **Result: it does not.** Projected lane gold adds -0.00006 log loss per game (interval -0.0011 to +0.0010); champion WPA is
+  slightly worse; the draft alone gets 55.4% right against 54.9% for "blue wins".
+- **The test had the power to see a real effect.** If a projected gold lead converted like a real gold lead at 14 minutes, a typical
+  draft would move the bar ~5 points and gain ~0.006 per game, which the interval rules out.
+- **What does hold:** projected lane gold predicts the real gold lead at 14 minutes with a slope of 1.05 (calibrated), but only
+  r = 0.16: lanes go the way the draft says on average, then the game is decided elsewhere (lane-strong champions trade off scaling,
+  and pro teams draft around their weak lanes).
+- **Product decision:** no moving bar (it would be noise dressed as insight). The board shows the pre-game win chance (side + team
+  strength) and the projected lane gold per role as the draft fills in, labelled as an early-game projection, not a result forecast.
+  This test is part of the methodology write-up: it is the evidence that the tool does not overclaim.
+
 ## Architecture
 
 | Part | Choice | IDE |

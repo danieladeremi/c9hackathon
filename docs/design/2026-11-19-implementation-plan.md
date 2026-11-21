@@ -77,6 +77,11 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 
 **Status (21 Nov):** `uv run python -m winprob.train` trains both models in ~25 s and writes `docs/results/winprob-report.md`. Elo by team (not by split), logistic regression chosen over the MLP. WPA uses empirical-Bayes shrinkage and reliability-based evidence labels instead of bootstrap intervals and a fixed threshold, because per-champion total WPA turned out to be mostly noise (see the design doc, "Model results"). Reliability diagrams are tables in the report for now; a chart can go in the UI or the write-up.
 
+### 3b. Live win-probability bar (judges' "next level")
+
+- [x] Test whether the draft predicts results beyond team strength on held-out 2026 games (`winprob/draft_eval.py`). It does not, and the test had the power to see a ~5-point effect; see the design doc.
+- [ ] Show the pre-game win chance and the projected lane gold per role on the board instead of a moving bar.
+
 ## 4. Series planner (target 31 Dec)
 
 - [x] Show each team's remaining Fearless pool after each game.
