@@ -1,0 +1,128 @@
+{
+  "method": "P(team uses champion after game 1) from its last 80 games, smoothed toward the league's pick rate over the previous 60 days (8 games of weight); logistic calibration fitted on 2025-01-01 to 2026-01-01, evaluated on series from 2026-01-01",
+  "calibration": {
+    "a": -0.3678,
+    "b": 0.6616
+  },
+  "fit_rows": 109330,
+  "test": {
+    "calibrated": {
+      "n": 38135,
+      "accuracy": 0.9394,
+      "log_loss": 0.1865,
+      "brier": 0.0514,
+      "ece": 0.0052,
+      "reliability": [
+        {
+          "bin_low": 0.0,
+          "bin_high": 0.1,
+          "mean_predicted": 0.0241,
+          "observed": 0.0218,
+          "count": 27540
+        },
+        {
+          "bin_low": 0.1,
+          "bin_high": 0.2,
+          "mean_predicted": 0.1429,
+          "observed": 0.1269,
+          "count": 7675
+        },
+        {
+          "bin_low": 0.2,
+          "bin_high": 0.3,
+          "mean_predicted": 0.2387,
+          "observed": 0.2359,
+          "count": 2514
+        },
+        {
+          "bin_low": 0.3,
+          "bin_high": 0.4,
+          "mean_predicted": 0.3301,
+          "observed": 0.3315,
+          "count": 368
+        },
+        {
+          "bin_low": 0.4,
+          "bin_high": 0.5,
+          "mean_predicted": 0.4284,
+          "observed": 0.5526,
+          "count": 38
+        }
+      ]
+    },
+    "uncalibrated": {
+      "n": 38135,
+      "accuracy": 0.9396,
+      "log_loss": 0.1933,
+      "brier": 0.0515,
+      "ece": 0.013,
+      "reliability": [
+        {
+          "bin_low": 0.0,
+          "bin_high": 0.1,
+          "mean_predicted": 0.0188,
+          "observed": 0.0306,
+          "count": 31344
+        },
+        {
+          "bin_low": 0.1,
+          "bin_high": 0.2,
+          "mean_predicted": 0.1413,
+          "observed": 0.1609,
+          "count": 4561
+        },
+        {
+          "bin_low": 0.2,
+          "bin_high": 0.3,
+          "mean_predicted": 0.2421,
+          "observed": 0.2525,
+          "count": 1624
+        },
+        {
+          "bin_low": 0.3,
+          "bin_high": 0.4,
+          "mean_predicted": 0.3365,
+          "observed": 0.3124,
+          "count": 477
+        },
+        {
+          "bin_low": 0.4,
+          "bin_high": 0.5,
+          "mean_predicted": 0.4416,
+          "observed": 0.4,
+          "count": 100
+        },
+        {
+          "bin_low": 0.5,
+          "bin_high": 0.6,
+          "mean_predicted": 0.5371,
+          "observed": 0.6071,
+          "count": 28
+        },
+        {
+          "bin_low": 0.6,
+          "bin_high": 0.7,
+          "mean_predicted": 0.6163,
+          "observed": 0.0,
+          "count": 1
+        }
+      ]
+    },
+    "constant_rate": {
+      "n": 38135,
+      "accuracy": 0.9394,
+      "log_loss": 0.2285,
+      "brier": 0.0569,
+      "ece": 0.0006,
+      "reliability": [
+        {
+          "bin_low": 0.0,
+          "bin_high": 0.1,
+          "mean_predicted": 0.0612,
+          "observed": 0.0606,
+          "count": 38135
+        }
+      ]
+    }
+  }
+}

@@ -213,6 +213,10 @@ export default function App() {
           tendGame={tendGame}
           pools={state?.pools ?? {}}
           accuracy={predictorAccuracy}
+          series={series}
+          gameIndex={index}
+          champions={champions}
+          order={order}
           onSelect={record}
         />
       </main>

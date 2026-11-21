@@ -232,3 +232,12 @@ h1, h2, h3 { margin: 0; }
   .topbar { flex-wrap: wrap; }
   .grid { max-height: 50vh; }
 }
+
+/* Evidence labels and the C9 pick panel */
+.ev { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 1px 5px; border-radius: 4px; justify-self: start; }
+.ev-strong { background: color-mix(in srgb, var(--win) 18%, transparent); color: var(--win); }
+.ev-some { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.ev-weak { background: var(--surface-2); color: var(--muted); }
+.rank-row-lane { grid-template-columns: minmax(0, 1fr) 56px 60px 56px; }
+.rank-row-fearless { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 40px 70px; }
+.rank-row-fearless:disabled { opacity: 0.5; }

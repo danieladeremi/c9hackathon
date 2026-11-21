@@ -19,6 +19,7 @@ export function ChampionGrid({ champions, unavailable, fearless, disabled, onSel
     const q = query.trim().toLowerCase()
     return champions.filter(
       (c) =>
+        Boolean(c.champion_id && c.name) &&
         (role === 'all' || c.main_role === role) &&
         (!q || c.name.toLowerCase().includes(q)) &&
         !(hideUnavailable && unavailable[c.champion_id]),

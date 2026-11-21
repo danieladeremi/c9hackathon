@@ -17,7 +17,8 @@ from pydantic import BaseModel, Field
 
 from pipeline.config import DB_PATH, REPO_ROOT
 
-from . import stats
+from . import series_value as sv
+from . import stats, wpa_api
 from .rules import DRAFT_ORDER, DraftError, Game, Series, phase_of
 
 C9_TEAM_ID = "47351"  # Cloud9 Kia in the GRID LoL data
@@ -35,9 +36,11 @@ async def lifespan(_app):
         for con in _connections:
             con.close()
         _connections.clear()
+    wpa_api.close_connections()
 
 
 app = FastAPI(title="C9 Draft Planner", lifespan=lifespan)
+app.include_router(wpa_api.router)
 
 
 class HitRate(BaseModel):
@@ -179,6 +182,35 @@ def draft_state(body: SeriesIn) -> dict:
         pools[team] = players
     return {"games": games_out, "current_game": current, "wins": series.wins(),
             "decided": series.decided, "pools": pools}
+
+
+@app.post("/api/draft/series-value")
+def series_value(body: SeriesIn, team: str = C9_TEAM_ID, top: int = Query(25, ge=1, le=100)) -> dict:
+    """Fearless series value of every champion still available in the current game, for ``team``:
+    denial (chance the opponent would use it later), cost (chance ``team`` would want it later), net."""
+    series = _series(body)
+    if team not in (series.team_a, series.team_b):
+        raise HTTPException(422, "team must be one of the series' two teams")
+    index = series.current_game_index()
+    if index is None:
+        raise HTTPException(409, "No game in progress: add the next game first")
+    con = db()
+    names = dict(con.execute("SELECT champion_id, any_value(champion_name) FROM player_games GROUP BY 1").fetchall())
+    result = sv.series_value(con, series, index, team, names, set(series.unavailable(index)), top)
+    result["game_number"] = index + 1
+    result["accuracy"] = _series_use_accuracy()
+    return result
+
+
+def _series_use_accuracy() -> dict | None:
+    """Headline accuracy of the use forecast, for the evidence line under the list."""
+    try:
+        data = json.loads(sv.CALIBRATION_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    test = data["test"]
+    return {"log_loss": test["calibrated"]["log_loss"], "constant_log_loss": test["constant_rate"]["log_loss"],
+            "ece": test["calibrated"]["ece"], "rows": test["calibrated"]["n"]}
 
 
 @app.post("/api/draft/validate")

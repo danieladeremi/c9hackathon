@@ -59,7 +59,8 @@ def champions(con) -> list[dict]:
         SELECT pg.champion_id, any_value(pg.champion_name) AS name, count(*) AS games,
                round(avg(CASE WHEN pg.won THEN 1 ELSE 0 END), 3) AS win_rate,
                arg_max(pg.role, cnt) AS main_role
-        FROM (SELECT *, count(*) OVER (PARTITION BY champion_id, role) AS cnt FROM player_games) pg
+        FROM (SELECT *, count(*) OVER (PARTITION BY champion_id, role) AS cnt FROM player_games
+              WHERE champion_id IS NOT NULL AND champion_name IS NOT NULL) pg
         GROUP BY 1 ORDER BY name
     """)
 

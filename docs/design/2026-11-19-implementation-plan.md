@@ -70,8 +70,8 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 - [x] In-game model: logistic regression baseline, then small MLP. Split by game; hold out the most recent split.
 - [x] Report accuracy, ECE and reliability diagrams per time window; keep the better-calibrated model.
 - [x] WPA table per draft slot: `ΔW̄` overall and per phase, `W̄`, win rate, sample size, bootstrap interval, "not enough data" threshold.
-- [ ] Show the WPA table in the draft board for the current slot.
-  - Next: API endpoint over `data/winprob.duckdb` and a panel for C9 pick slots (lane gold vs the revealed enemy laner, early WPA, total WPA shrunk, evidence labels). Waits for Junie task 01 to merge (same files).
+- [x] Show the WPA table in the draft board for the current slot.
+  - Done (22 Nov): `/api/wpa/candidates` and the C9 pick panel: lane gold @14 for the chosen role, head-to-head once the enemy laner is picked (falling back to the overall figure when the head-to-head is thin), evidence labels, early WPA and selection bias in the tooltip.
 
 **Done when:** for any slot in the draft, every eligible champion shows WPA with an interval or "not enough data", and the model's calibration report is in the repo.
 
@@ -79,8 +79,9 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 
 ## 4. Series planner (target 31 Dec)
 
-- [ ] Show each team's remaining Fearless pool after each game.
+- [x] Show each team's remaining Fearless pool after each game.
 - [ ] "If we take X in game N" view for later games, for both teams.
+  - Partly done (22 Nov): **Fearless series value** in C9 pick slots. For each available champion: *denies* = chance the opponent would use it later in the series, *costs* = chance C9 would want it later, from each team's last 80 games smoothed toward the league's recent rate, over the expected games left (coin-flip series model). Only champions a current C9 player has 3+ pro games on are recommended. Forecast fitted on 2025 series, tested on 2026: log loss 0.186 vs 0.229 for a flat rate, calibrated within ~1 point up to 33% (`docs/results/series-use-calibration.json`, `uv run python -m planner.series_value`). A dedicated what-if view for later games is still to do.
 
 **Done when:** a coach can see what C9 and the opponent have left for games 3-5 after any games 1-2 drafts.
 

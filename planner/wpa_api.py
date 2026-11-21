@@ -120,13 +120,15 @@ def candidates(
         item = _shape(row)
         m = matchups.get(row["champion_id"])
         item["vs"] = None
-        sort_key = row.get("lane_gold14") or 0.0
+        # The figure used: head-to-head when it has at least "some" evidence, else the champion overall.
+        used = item["lane_gold14"]
         if m:
             item["vs"] = {"games": m["games"], "lane_gold14": _metric_block(m, "lane_gold14"), "early": _metric_block(m, "early")}
             if m.get("lane_gold14_evidence") in ("strong", "some"):
-                sort_key = m["lane_gold14"]
+                used = item["vs"]["lane_gold14"]
+        sort_key = used["estimate"] or 0.0
         # Thin evidence sinks: rank by estimate, but weak figures after the rest.
-        evidence_rank = 0 if (item["vs"] or item)["lane_gold14"]["evidence"] in ("strong", "some") else 1
+        evidence_rank = 0 if used["evidence"] in ("strong", "some") else 1
         out.append((evidence_rank, -sort_key, item))
     out.sort(key=lambda t: (t[0], t[1]))
     opp_name = None

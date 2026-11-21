@@ -138,6 +138,64 @@ export interface Tendencies {
   bans_against: TendencyRow[]
 }
 
+export type Evidence = 'strong' | 'some' | 'weak'
+
+export interface MetricEstimate {
+  estimate: number | null
+  raw: number | null
+  low: number | null
+  high: number | null
+  evidence: Evidence | null
+}
+
+export interface WpaCandidate {
+  champion_id: string
+  name: string
+  role: Role
+  games: number
+  win_rate_raw: number | null
+  w0_mean: number | null
+  lane_gold14: MetricEstimate
+  early: MetricEstimate
+  total: MetricEstimate
+  vs: { games: number; lane_gold14: MetricEstimate; early: MetricEstimate } | null
+}
+
+export interface WpaCandidates {
+  role: Role
+  opp_champion_id: string | null
+  opp_name: string | null
+  candidates: WpaCandidate[]
+}
+
+export interface SeriesValueRow {
+  champion_id: string
+  name: string
+  denial: number
+  cost: number
+  net: number
+  their_picks: number
+  our_picks: number
+  their_player: string | null
+  their_player_games: number
+  our_player: string | null
+  our_player_games: number
+  playable: boolean
+}
+
+export interface SeriesValue {
+  us: string
+  them: string
+  game_number: number
+  future_game_probabilities: number[]
+  expected_future_games: number
+  history_games: { us: number; them: number; window: number }
+  playable_min_games: number
+  champions: SeriesValueRow[]
+  note: string
+  accuracy: { log_loss: number; constant_log_loss: number; ece: number; rows: number } | null
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, init)
   if (!response.ok) {
@@ -162,6 +220,18 @@ export const api = {
     if (gameNumber) params.set('game_number', String(gameNumber))
     if (since) params.set('since', since)
     return request<Tendencies>(`/api/teams/${teamId}/tendencies?${params}`)
+  },
+  seriesValue: (series: SeriesIn, top = 12) =>
+    request<SeriesValue>(`/api/draft/series-value?top=${top}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(series),
+    }),
+  wpaCandidates: (role: Role, oppChampionId: string | null, exclude: string[], limit = 8) => {
+    const params = new URLSearchParams({ role, limit: String(limit) })
+    if (oppChampionId) params.set('opp_champion_id', oppChampionId)
+    for (const id of exclude) params.append('exclude', id)
+    return request<WpaCandidates>(`/api/wpa/candidates?${params}`)
   },
   draftState: (series: SeriesIn) =>
     request<DraftState>('/api/draft/state', {

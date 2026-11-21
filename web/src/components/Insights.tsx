@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import type { NextSlot, PlayerPool, PredictorAccuracy, Tendencies, TendencyRow } from '../api'
+import type { Champion, NextSlot, OrderSlot, PlayerPool, PredictorAccuracy, SeriesIn, Tendencies, TendencyRow } from '../api'
+import { C9PickPanel } from './C9PickPanel'
 
 interface Props {
   next: NextSlot | null
@@ -12,6 +13,10 @@ interface Props {
   tendGame: Tendencies | null
   pools: Record<string, PlayerPool[]>
   accuracy: PredictorAccuracy | null
+  series: SeriesIn
+  gameIndex: number
+  champions: Champion[]
+  order: OrderSlot[]
   onSelect: (championId: string) => void
 }
 
@@ -30,6 +35,7 @@ function Bar({ value }: { value: number }) {
 /** Evidence for the current slot, the opponent's habits by game number, and what each roster has left. */
 export function Insights(props: Props) {
   const { next, c9Id, opponentId, teamNames, gameNumber, unavailable, tendAll, tendGame, pools, accuracy, onSelect } = props
+  const { series, gameIndex, champions, order } = props
   const [tab, setTab] = useState<'slot' | 'tendencies' | 'pools'>('slot')
   const opp = teamNames.get(opponentId) ?? 'Opponent'
 
@@ -49,7 +55,20 @@ export function Insights(props: Props) {
         ))}
       </div>
       {tab === 'slot' && (
-        <SlotView next={next} c9Id={c9Id} opp={opp} unavailable={unavailable} tendGame={tendGame} tendAll={tendAll} pools={pools} accuracy={accuracy} onSelect={onSelect} />
+        next && next.team_id === c9Id && next.action === 'pick' ? (
+          <C9PickPanel
+            series={series}
+            gameIndex={gameIndex}
+            c9Id={c9Id}
+            oppName={opp}
+            champions={champions}
+            order={order}
+            unavailable={unavailable}
+            onSelect={onSelect}
+          />
+        ) : (
+          <SlotView next={next} c9Id={c9Id} opp={opp} unavailable={unavailable} tendGame={tendGame} tendAll={tendAll} accuracy={accuracy} onSelect={onSelect} />
+        )
       )}
       {tab === 'tendencies' && <TendencyView opp={opp} gameNumber={gameNumber} tendAll={tendAll} tendGame={tendGame} />}
       {tab === 'pools' && <PoolsView pools={pools} teamNames={teamNames} order={[c9Id, opponentId]} />}
@@ -57,14 +76,13 @@ export function Insights(props: Props) {
   )
 }
 
-function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, accuracy, onSelect }: {
+function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, accuracy, onSelect }: {
   next: NextSlot | null
   c9Id: string
   opp: string
   unavailable: Record<string, string>
   tendGame: Tendencies | null
   tendAll: Tendencies | null
-  pools: Record<string, PlayerPool[]>
   accuracy: PredictorAccuracy | null
   onSelect: (id: string) => void
 }) {
@@ -98,39 +116,17 @@ function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, accu
     )
   }
 
-  if (next.action === 'ban') {
-    const source = tendGame && tendGame.games >= 5 ? tendGame : tendAll
-    const threats = (source?.picks ?? []).filter((p) => !unavailable[p.champion_id]).slice(0, 10)
-    return (
-      <div className="pad">
-        <h3 className="insight-title">{opp} picks still open</h3>
-        <p className="evidence">
-          Their most-picked champions{source === tendGame ? ` in game ${tendGame?.game_number}s` : ''}, from {source?.games ?? 0} games. Ban candidates.
-        </p>
-        <TendencyList rows={threats} games={source?.games ?? 0} onSelect={onSelect} showPlayer />
-      </div>
-    )
-  }
-
-  const comfort = (pools[c9Id] ?? [])
-    .flatMap((p) => p.champions.filter((c) => c.available && !unavailable[c.champion_id]).slice(0, 4).map((c) => ({ ...c, player: p.name, role: p.role })))
-    .sort((a, b) => b.games - a.games)
+  // C9 ban (C9 picks are handled by C9PickPanel).
+  const source = tendGame && tendGame.games >= 5 ? tendGame : tendAll
+  const threats = (source?.picks ?? []).filter((p) => !unavailable[p.champion_id]).slice(0, 10)
   return (
     <div className="pad">
-      <h3 className="insight-title">C9 comfort picks still open</h3>
-      <p className="evidence">Each player's most-played champions in pro games that are still legal this game.</p>
-      <ol className="rank">
-        {comfort.map((c) => (
-          <li key={`${c.player}-${c.champion_id}`}>
-            <button className="rank-row" onClick={() => onSelect(c.champion_id)}>
-              <span className="rank-name">{c.name}</span>
-              <span className="rank-meta">{c.player} · {c.role}</span>
-              <span className="rank-num">{c.games} g</span>
-              <span className="rank-n">{pct(c.wins / Math.max(1, c.games))} W</span>
-            </button>
-          </li>
-        ))}
-      </ol>
+      <h3 className="insight-title">{opp} picks still open</h3>
+      <p className="evidence">
+        Their most-picked champions{source === tendGame ? ` in game ${tendGame?.game_number}s` : ''}, from {source?.games ?? 0} games. Ban candidates.
+        Bans do not carry over in Fearless: this ban only affects this game.
+      </p>
+      <TendencyList rows={threats} games={source?.games ?? 0} onSelect={onSelect} showPlayer />
     </div>
   )
 }

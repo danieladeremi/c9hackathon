@@ -42,7 +42,9 @@ def client(tmp_path, monkeypatch):
     ])
     m = _row("b", "Bravo", "top", 12, 450.0, "some")
     m.update({"opp_champion_id": "z", "opp_champion_name": "Zulu"})
-    _create(con, "matchup_wpa", [m])
+    thin = _row("a", "Alpha", "top", 3, -200.0, "weak")   # thin head-to-head must not bury a strong overall figure
+    thin.update({"opp_champion_id": "z", "opp_champion_name": "Zulu"})
+    _create(con, "matchup_wpa", [m, thin])
     con.close()
     monkeypatch.setattr(wpa_api, "WINPROB_DB", db)
     monkeypatch.setattr(wpa_api, "_local", threading.local())
@@ -68,3 +70,11 @@ def test_candidates_use_head_to_head_when_enemy_known(client):
 
 def test_role_is_validated(client):
     assert client.get("/api/wpa/champions", params={"role": "carry"}).status_code == 422
+
+
+def test_weak_head_to_head_falls_back_to_overall(client):
+    body = client.get("/api/wpa/candidates", params={"role": "top", "opp_champion_id": "z"}).json()
+    names = [c["name"] for c in body["candidates"]]
+    assert names[:2] == ["Bravo", "Alpha"]  # Bravo +450 h2h (some), then Alpha's strong +300 overall
+    alpha = body["candidates"][1]
+    assert alpha["vs"]["lane_gold14"]["evidence"] == "weak"

@@ -73,6 +73,21 @@ Full numbers: [docs/results/winprob-report.md](../results/winprob-report.md), re
   - Recommendations lean on what does repeat: opponent and player habits (to be confirmed by the predictor backtest, Junie task 01), lane matchups, early WPA and player comfort. The Fearless series value is built from these, not from total WPA.
   - The methodology write-up should say this plainly: it is a measured, non-obvious result and a reason to trust the tool.
 
+## Fearless series value: as built (2026-11-22)
+
+- **Denies** = P(opponent uses the champion in the rest of the series); **costs** = P(C9 would want it later); **net** = denies - costs.
+  Both from one forecast: the team's pick rate over its last 80 games, smoothed toward the league's pick rate over the previous
+  60 days (8 games of weight), turned into P(at least one use) over the expected games left, then calibrated.
+- **Expected games left** comes from a coin-flip series model given the score (e.g. drafting game 1 of a Bo5: games 2-3 certain,
+  game 4 at 75%, game 5 at 37.5%).
+- **Validated:** fitted on 2025 series, tested on 2026 (38,135 team-series-champion cases, champions locked in game 1 left out):
+  log loss 0.186 against 0.229 for a flat rate; when it says 14% / 24% / 33%, it happens 13% / 24% / 33% of the time.
+- **Playable filter:** denying by picking only works if C9 can play it, so only champions a current C9 player has 3+ pro games on
+  are recommended. Bans have no series effect in Fearless and the board says so.
+- Not a win-rate claim: the judges' example ("banning her drops their Game 2 win rate by 15%") would need champion win-rate effects,
+  which the reliability check showed are mostly noise at pro sample sizes. The tool states what it can back instead: how likely the
+  opponent is to rely on a champion later, and who on their roster plays it.
+
 ## Architecture
 
 | Part | Choice | IDE |

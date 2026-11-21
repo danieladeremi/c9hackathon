@@ -54,3 +54,17 @@ The developer chose the idea and the category, approved each design change, and 
   between random halves of the data, while lane gold at 14 minutes repeats strongly. Rather than ship a ranking of noise,
   every figure is now shrunk by its measured reliability and labelled strong, some or weak evidence.
 - Kept away from the files Junie's task touches, so both could work at once.
+
+### 22 Nov 2026: Fearless series value and the C9 pick panel (Claude Code, in PyCharm)
+- Ran Junie and Claude in parallel: Junie got task 02 (recency-weighted predictor, `planner/stats.py` and `backtest.py` only) while
+  Claude built the Fearless value in new files plus `api.py` and the UI. File boundaries were written into the brief to avoid clashes.
+- Checked the idea against the data before building it: a team's recent picks do forecast which champions it uses later in a series.
+  Two fixes came from looking at the calibration table, not the headline number: champions already locked in game 1 were wrongly
+  counted as "not used", and champions a team had never picked got a forecast of exactly zero. After both, the forecast beats a flat
+  rate by 18% and its probabilities hold up (24% predicted, 24% observed).
+- Added a playable filter after the first ranking recommended taking Xayah to deny an opponent, when no C9 player plays Xayah.
+- **Browser testing caught a crash no test had**: typing in the champion search froze the board, because 17 player-games with no
+  recorded champion became a nameless champion. Fixed at the query and guarded in the UI.
+- **Reviewing a screenshot caught a ranking bug**: once the enemy laner was known, champions with a thin head-to-head record sank
+  below weaker ones, instead of falling back to their solid overall number. Fixed, with a regression test.
+
