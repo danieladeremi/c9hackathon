@@ -95,7 +95,7 @@ Elo with K=40 and break shrink 0.0 (chosen on training games). Blue side won 52.
 | WPA 25+ min | 0 | 0 | 322 |
 | WPA total | 0 | 0 | 322 |
 | Raw win rate | 0 | 0 | 322 |
-| Lane gold diff @14 | 105 | 76 | 140 |
+| Lane gold diff @14 | 91 | 42 | 188 |
 
 Estimated spread of *true* champion effects within a role (tau; lane gold in gold, the rest in win probability):
 

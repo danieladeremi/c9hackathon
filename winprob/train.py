@@ -275,7 +275,7 @@ def _shrunk_rows(values: dict, context: dict | None, names: dict, matchups: bool
                 row[f"{metric}_low"] = round(low, 4)
                 row[f"{metric}_high"] = round(high, 4)
                 row[f"{metric}_reliability"] = round(est.reliability, 3)
-                row[f"{metric}_evidence"] = W.evidence_label(est.reliability)
+                row[f"{metric}_evidence"] = W.evidence_label(est.reliability, len(groups[key]))
     if context:
         for key, row in rows.items():
             pairs = context.get(key, [])

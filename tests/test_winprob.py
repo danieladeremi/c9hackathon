@@ -73,3 +73,9 @@ def test_split_half_reliability_detects_signal_and_noise():
     noise = {f"c{k}": [(g, rng.normal(0, 5)) for g in games[k::20]] for k in range(20)}
     assert split_half_reliability(signal, {}, 30, rng)["correlation"] > 0.9
     assert abs(split_half_reliability(noise, {}, 30, rng)["correlation"]) < 0.5
+
+
+def test_evidence_needs_games_as_well_as_reliability():
+    assert evidence_label(0.9, 30) == "strong"
+    assert evidence_label(0.9, 10) == "some"
+    assert evidence_label(0.9, 5) == "weak"

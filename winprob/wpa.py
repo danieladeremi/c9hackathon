@@ -63,10 +63,16 @@ def path_value(minute: int, duration_s: float | None, state_p: float | None, out
     return state_p
 
 
-def evidence_label(reliability: float) -> str:
-    if reliability >= STRONG:
+STRONG_MIN_GAMES, SOME_MIN_GAMES = 20, 8
+
+
+def evidence_label(reliability: float, games: int | None = None) -> str:
+    """Strength of evidence for one figure: needs both measured reliability and enough games,
+    because tau (and so reliability) is itself uncertain for tiny groups."""
+    n = games if games is not None else STRONG_MIN_GAMES
+    if reliability >= STRONG and n >= STRONG_MIN_GAMES:
         return "strong"
-    if reliability >= SOME:
+    if reliability >= SOME and n >= SOME_MIN_GAMES:
         return "some"
     return "weak"
 
