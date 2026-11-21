@@ -68,3 +68,10 @@ The developer chose the idea and the category, approved each design change, and 
 - **Reviewing a screenshot caught a ranking bug**: once the enemy laner was known, champions with a thin head-to-head record sank
   below weaker ones, instead of falling back to their solid overall number. Fixed, with a regression test.
 
+### 22 Nov 2026: what-if series planner (Claude Code, while Junie ran task 02)
+- Built the *Series plan* tab: plan picks across games, then see both rosters' comfort pools at the start of any later game, with
+  depth before and after the plan. It reuses the validated Fearless forecast for "at risk" champions instead of inventing a new number.
+- The first version flagged 4-8 champions per player as at risk, which buried the signal; raising the bar to 25% left the few that matter.
+- Worked alongside Junie's task 02 in the same checkout: Claude's commit included only its own files, leaving Junie's in-progress
+  `stats.py` and `backtest.py` changes untouched for review.
+

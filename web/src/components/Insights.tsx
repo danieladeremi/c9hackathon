@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import type { Champion, NextSlot, OrderSlot, PlayerPool, PredictorAccuracy, SeriesIn, Tendencies, TendencyRow } from '../api'
+import type { Champion, NextSlot, OrderSlot, PlannedPick, PredictorAccuracy, SeriesIn, Tendencies, TendencyRow } from '../api'
 import { C9PickPanel } from './C9PickPanel'
+import { SeriesPlan } from './SeriesPlan'
 
 interface Props {
   next: NextSlot | null
@@ -11,8 +12,9 @@ interface Props {
   unavailable: Record<string, string>
   tendAll: Tendencies | null
   tendGame: Tendencies | null
-  pools: Record<string, PlayerPool[]>
   accuracy: PredictorAccuracy | null
+  plan: PlannedPick[]
+  onPlanChange: (plan: PlannedPick[]) => void
   series: SeriesIn
   gameIndex: number
   champions: Champion[]
@@ -34,9 +36,9 @@ function Bar({ value }: { value: number }) {
 
 /** Evidence for the current slot, the opponent's habits by game number, and what each roster has left. */
 export function Insights(props: Props) {
-  const { next, c9Id, opponentId, teamNames, gameNumber, unavailable, tendAll, tendGame, pools, accuracy, onSelect } = props
-  const { series, gameIndex, champions, order } = props
-  const [tab, setTab] = useState<'slot' | 'tendencies' | 'pools'>('slot')
+  const { next, c9Id, opponentId, teamNames, gameNumber, unavailable, tendAll, tendGame, accuracy, onSelect } = props
+  const { series, gameIndex, champions, order, plan, onPlanChange } = props
+  const [tab, setTab] = useState<'slot' | 'tendencies' | 'plan'>('slot')
   const opp = teamNames.get(opponentId) ?? 'Opponent'
 
   return (
@@ -46,7 +48,7 @@ export function Insights(props: Props) {
           [
             ['slot', 'This slot'],
             ['tendencies', `${opp} habits`],
-            ['pools', 'Fearless pools'],
+            ['plan', 'Series plan'],
           ] as const
         ).map(([key, label]) => (
           <button key={key} role="tab" aria-selected={tab === key} className={tab === key ? 'tab tab-on' : 'tab'} onClick={() => setTab(key)}>
@@ -71,7 +73,17 @@ export function Insights(props: Props) {
         )
       )}
       {tab === 'tendencies' && <TendencyView opp={opp} gameNumber={gameNumber} tendAll={tendAll} tendGame={tendGame} />}
-      {tab === 'pools' && <PoolsView pools={pools} teamNames={teamNames} order={[c9Id, opponentId]} />}
+      {tab === 'plan' && (
+        <SeriesPlan
+          series={series}
+          c9Id={c9Id}
+          opponentId={opponentId}
+          teamNames={teamNames}
+          champions={champions}
+          plan={plan}
+          onPlanChange={onPlanChange}
+        />
+      )}
     </aside>
   )
 }
@@ -199,38 +211,6 @@ function TendencyView({ opp, gameNumber, tendAll, tendGame }: { opp: string; gam
       <h3 className="insight-title">Banned against {opp}</h3>
       <p className="evidence">What opponents respect most.</p>
       <TendencyList rows={(t?.bans_against ?? []).slice(0, 6)} games={t?.games ?? 0} />
-    </div>
-  )
-}
-
-function PoolsView({ pools, teamNames, order }: { pools: Record<string, PlayerPool[]>; teamNames: Map<string, string>; order: string[] }) {
-  return (
-    <div className="pad">
-      <p className="evidence">Most-played champions per current player. Struck-through champions are gone for this game (Fearless or drafted).</p>
-      {order.map((teamId) => (
-        <div key={teamId} className="pool-team">
-          <h3 className="insight-title">{teamNames.get(teamId) ?? teamId}</h3>
-          {(pools[teamId] ?? []).map((p) => {
-            const open = p.champions.filter((c) => c.available).length
-            return (
-              <div key={p.player_id} className="pool-row">
-                <div className="pool-player">
-                  <strong>{p.name}</strong>
-                  <span className="muted">{p.role}</span>
-                  <span className={open <= 3 ? 'pool-left pool-low' : 'pool-left'}>{open}/{p.champions.length} open</span>
-                </div>
-                <ul className="pool-champs">
-                  {p.champions.map((c) => (
-                    <li key={c.champion_id} className={c.available ? 'pchip' : 'pchip pchip-off'} title={`${c.games} games, ${c.wins} wins`}>
-                      {c.name} <span className="muted">{c.games}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )
-          })}
-        </div>
-      ))}
     </div>
   )
 }

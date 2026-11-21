@@ -196,6 +196,43 @@ export interface SeriesValue {
   accuracy: { log_loss: number; constant_log_loss: number; ece: number; rows: number } | null
 }
 
+export interface PlannedPick {
+  game_number: number
+  team_id: string
+  champion_id: string
+}
+
+export type PoolStatus = 'open' | 'at_risk' | 'planned' | 'gone'
+
+export interface WhatIfPlayer {
+  player_id: string
+  name: string
+  role: Role
+  champions: {
+    champion_id: string
+    name: string
+    games: number
+    status: PoolStatus
+    detail: { game: number; team_id: string } | null
+    risk: number
+  }[]
+  open_count: number
+  depth_without_plan: number
+  depth_with_plan: number
+  expected_depth: number
+  thin: boolean
+}
+
+export interface WhatIf {
+  at_game: number
+  current_game: number
+  p_at_game_played: number
+  expected_games_before: number
+  plan: (PlannedPick & { name: string })[]
+  thresholds: { at_risk: number; thin_open_count: number; thin_share: number }
+  teams: { team_id: string; players: WhatIfPlayer[] }[]
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, init)
   if (!response.ok) {
@@ -226,6 +263,12 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(series),
+    }),
+  whatIf: (series: SeriesIn, plan: PlannedPick[], atGame: number) =>
+    request<WhatIf>('/api/draft/what-if', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ series, plan, at_game: atGame }),
     }),
   wpaCandidates: (role: Role, oppChampionId: string | null, exclude: string[], limit = 8) => {
     const params = new URLSearchParams({ role, limit: String(limit) })

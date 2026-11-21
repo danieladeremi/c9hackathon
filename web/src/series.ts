@@ -1,7 +1,7 @@
 // Client-side series state. The server is the authority on legality (/api/draft/state);
 // these helpers only build and edit the plain data sent to it.
 
-import { C9_TEAM_ID, type GameIn, type SeriesIn } from './api'
+import { C9_TEAM_ID, type GameIn, type PlannedPick, type SeriesIn } from './api'
 
 export const GAMES_IN: Record<SeriesIn['format'], number> = { bo1: 1, bo3: 3, bo5: 5 }
 
@@ -64,5 +64,24 @@ export function saveSeries(series: SeriesIn | null): void {
     else localStorage.removeItem(STORAGE_KEY)
   } catch {
     /* storage unavailable: the board still works, it just won't survive a reload */
+  }
+}
+
+const PLAN_KEY = 'c9-draft-planner/plan'
+
+export function loadPlan(): PlannedPick[] {
+  try {
+    const raw = localStorage.getItem(PLAN_KEY)
+    return raw ? (JSON.parse(raw) as PlannedPick[]) : []
+  } catch {
+    return []
+  }
+}
+
+export function savePlan(plan: PlannedPick[]): void {
+  try {
+    localStorage.setItem(PLAN_KEY, JSON.stringify(plan))
+  } catch {
+    /* storage unavailable */
   }
 }

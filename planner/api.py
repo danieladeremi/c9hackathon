@@ -17,6 +17,7 @@ from pydantic import BaseModel, Field
 
 from pipeline.config import DB_PATH, REPO_ROOT
 
+from . import series_plan as sp
 from . import series_value as sv
 from . import stats, wpa_api
 from .rules import DRAFT_ORDER, DraftError, Game, Series, phase_of
@@ -200,6 +201,32 @@ def series_value(body: SeriesIn, team: str = C9_TEAM_ID, top: int = Query(25, ge
     result["game_number"] = index + 1
     result["accuracy"] = _series_use_accuracy()
     return result
+
+
+class PlannedPickIn(BaseModel):
+    game_number: int = Field(ge=1, le=5)
+    team_id: str
+    champion_id: str
+
+
+class WhatIfIn(BaseModel):
+    series: SeriesIn
+    plan: list[PlannedPickIn] = Field(default_factory=list)
+    at_game: int = Field(ge=1, le=5)
+
+
+@app.post("/api/draft/what-if")
+def what_if(body: WhatIfIn) -> dict:
+    """Both rosters' comfort pools at the start of ``at_game`` if the plan's picks happen:
+    gone (real picks), planned, at risk (the other team is likely to take it first), open."""
+    series = _series(body.series)
+    con = db()
+    names = dict(con.execute("SELECT champion_id, any_value(champion_name) FROM player_games GROUP BY 1").fetchall())
+    plan = [sp.PlannedPick(p.game_number, p.team_id, p.champion_id) for p in body.plan]
+    try:
+        return sp.plan_pools(con, series, plan, body.at_game, names)
+    except sp.PlanError as exc:
+        raise HTTPException(422, str(exc)) from exc
 
 
 def _series_use_accuracy() -> dict | None:

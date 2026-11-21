@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { api, C9_TEAM_ID, type Champion, type DraftState, type OrderSlot, type PredictorAccuracy, type SeriesIn, type Team, type Tendencies } from './api'
+import { api, C9_TEAM_ID, type Champion, type DraftState, type OrderSlot, type PlannedPick, type PredictorAccuracy, type SeriesIn, type Team, type Tendencies } from './api'
 import { ChampionGrid } from './components/ChampionGrid'
 import { Insights } from './components/Insights'
 import { TeamPanel } from './components/TeamPanel'
-import { c9Side, GAMES_IN, isDecided, loadSeries, newSeries, nextGame, saveSeries, setSetup, wins, withGame } from './series'
+import { c9Side, GAMES_IN, isDecided, loadPlan, loadSeries, newSeries, nextGame, savePlan, saveSeries, setSetup, wins, withGame } from './series'
 
 const PHASE_LABEL = { ban1: 'Ban phase 1', pick1: 'Pick phase 1', ban2: 'Ban phase 2', pick2: 'Pick phase 2' } as const
 
@@ -17,6 +17,7 @@ export default function App() {
   const [tendAll, setTendAll] = useState<Tendencies | null>(null)
   const [tendGame, setTendGame] = useState<Tendencies | null>(null)
   const [predictorAccuracy, setPredictorAccuracy] = useState<PredictorAccuracy | null>(null)
+  const [plan, setPlan] = useState<PlannedPick[]>(() => loadPlan())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function App() {
   }, [])
 
   useEffect(() => saveSeries(series), [series])
+  useEffect(() => savePlan(plan), [plan])
 
   useEffect(() => {
     if (!series) return
@@ -111,7 +113,7 @@ export default function App() {
           <span>{oppName}</span>
           <span className="muted">{series.format.toUpperCase()} · Fearless</span>
         </div>
-        <button className="ghost" onClick={() => confirm('Start a new series? The current one will be cleared.') && (setSeries(null), setState(null))}>
+        <button className="ghost" onClick={() => confirm('Start a new series? The current one will be cleared.') && (setSeries(null), setState(null), setPlan([]))}>
           New series
         </button>
       </header>
@@ -211,8 +213,9 @@ export default function App() {
           unavailable={gameState?.unavailable ?? {}}
           tendAll={tendAll}
           tendGame={tendGame}
-          pools={state?.pools ?? {}}
           accuracy={predictorAccuracy}
+          plan={plan}
+          onPlanChange={setPlan}
           series={series}
           gameIndex={index}
           champions={champions}

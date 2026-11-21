@@ -149,6 +149,17 @@ def _players(con, team_id: str) -> dict[str, tuple[str, int]]:
     return {c: (name.strip(), int(n)) for c, name, n in rows}
 
 
+def use_forecast(con, team_id: str, expected_games: float, league: dict[str, float] | None = None) -> dict[str, float]:
+    """Champion -> P(team uses it within ``expected_games`` games). Empty if the team has too little history."""
+    games, counts = pick_history(con, team_id)
+    if games < MIN_HISTORY_GAMES or expected_games <= 0:
+        return {}
+    league = league_rates(con) if league is None else league
+    a, b = calibration()
+    return {c: calibrate(raw_use_probability(smoothed_rate(counts.get(c, 0), games, league.get(c, 0.0)), expected_games), a, b)
+            for c in set(counts) | set(league)}
+
+
 def series_value(con, series: Series, game_index: int, us: str, champion_names: dict[str, str],
                  unavailable: set[str], top: int = 25) -> dict:
     """Rank the champions still available by net series value for ``us``."""

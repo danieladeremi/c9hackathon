@@ -80,10 +80,12 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 ## 4. Series planner (target 31 Dec)
 
 - [x] Show each team's remaining Fearless pool after each game.
-- [ ] "If we take X in game N" view for later games, for both teams.
-  - Partly done (22 Nov): **Fearless series value** in C9 pick slots. For each available champion: *denies* = chance the opponent would use it later in the series, *costs* = chance C9 would want it later, from each team's last 80 games smoothed toward the league's recent rate, over the expected games left (coin-flip series model). Only champions a current C9 player has 3+ pro games on are recommended. Forecast fitted on 2025 series, tested on 2026: log loss 0.186 vs 0.229 for a flat rate, calibrated within ~1 point up to 33% (`docs/results/series-use-calibration.json`, `uv run python -m planner.series_value`). A dedicated what-if view for later games is still to do.
+- [x] "If we take X in game N" view for later games, for both teams.
+  - Partly done (22 Nov): **Fearless series value** in C9 pick slots. For each available champion: *denies* = chance the opponent would use it later in the series, *costs* = chance C9 would want it later, from each team's last 80 games smoothed toward the league's recent rate, over the expected games left (coin-flip series model). Only champions a current C9 player has 3+ pro games on are recommended. Forecast fitted on 2025 series, tested on 2026: log loss 0.186 vs 0.229 for a flat rate, calibrated within ~1 point up to 33% (`docs/results/series-use-calibration.json`, `uv run python -m planner.series_value`). **What-if view done (22 Nov):** the *Series plan* tab takes planned picks (game, team, champion) and shows both rosters' comfort pools at the start of any later game: gone (real picks), planned, at risk (the other team takes it first at least 25% of the time, from the same forecast) and open, with each player's depth before and after the plan and a *thin* flag. Plans are validated against Fearless (no champion twice, nothing already picked). `POST /api/draft/what-if`.
 
 **Done when:** a coach can see what C9 and the opponent have left for games 3-5 after any games 1-2 drafts.
+
+**Status (22 Nov):** done. Example from the data: if C9 takes Rell and Rumble in game 1 and Rakan in game 2, and Team Liquid takes Renekton in game 2, Thanatos goes into game 3 with 69% of his usual pool and Morgan with 68%.
 
 ## 5. Pocket pick mode (target 5 Jan, cut if behind)
 
