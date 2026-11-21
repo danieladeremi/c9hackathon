@@ -1,0 +1,41 @@
+# AI-powered workflow: how this entry was built
+
+A running log of how AI agents and JetBrains tools built the C9 Draft Planner, kept as the work happened.
+Each entry says which tool did what, how the result was checked, and what a human decided.
+
+## Tools
+
+| Tool | Role |
+|---|---|
+| **PyCharm** | Main IDE for the whole repo: Python pipeline and API, React/TypeScript front end, test runner, run configurations (`.idea/runConfigurations/`) |
+| **Junie** (in PyCharm, JetBrains AI) | Coding agent for self-contained, testable tasks. Briefs live in `.junie/tasks/`; project rules in `.junie/guidelines.md` |
+| **Claude (Claude Code)** | Design, data investigation, architecture, writing Junie's task briefs and reviewing its diffs. Ran in VS Code for the first two sessions, then in PyCharm |
+
+The developer chose the idea and the category, approved each design change, and reviewed every commit.
+
+## Log
+
+### 19 Nov 2026: idea and design (Claude Code)
+- Researched the hackathon rules and wrote the design: a Fearless draft planner with a win-probability-added model adapted from
+  a published thesis method.
+
+### 20 Nov 2026: data pipeline (Claude Code)
+- Inspected the GRID LoL feed and found facts the docs did not state: `seriesState` is usually partial, not a full snapshot; roles
+  are missing; Fearless locks picks but not bans. The pipeline was designed around these findings.
+- **A bug found by watching the machine, not the tests:** the first full build froze the developer's laptop. Diagnosis: some feeds
+  report a game clock of ~35,000,000 s, and the snapshot loop tried to "catch up" with hundreds of thousands of rows. Fixed with a
+  clock guard; the build now runs in ~3 minutes at a 232 MB peak, with 2 workers at below-normal priority.
+- Role inference reached 5 inconsistent players out of 252 after adding a second pass that uses each player's history.
+- Verification: 1,737 games match the starter repo's index exactly; 0 winner mismatches; 0 repeated Fearless picks.
+
+### 20 Nov 2026: rules engine, API and draft board (Claude Code)
+- Derived the real draft order from the data: it is keyed on *first pick*, not side (the first-pick team was on red side in 246
+  games). The rules engine replays 739 of 740 real series; the one rejection is a feed that records two slots swapped.
+- Built the FastAPI service and the React draft board, then drove a full Fearless game in a headless browser to confirm the
+  locks (game 2 correctly locked the 10 game-1 picks).
+
+### 21 Nov 2026: moved into PyCharm; Junie joins
+- Opened the project in PyCharm, added shared run configurations, and wrote `.junie/guidelines.md` so Junie starts every task
+  with the data-licence rules and the laptop's memory limits.
+- Junie task 01 (`.junie/tasks/01-predictor-backtest.md`): measure the opponent-prediction hit rate on held-out games against a
+  league-popularity baseline. *Result: pending.*
