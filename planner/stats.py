@@ -15,6 +15,21 @@ def _rows(con, sql: str, params: list | None = None) -> list[dict[str, Any]]:
     return [dict(zip(cols, row)) for row in result.fetchall()]
 
 
+def rank_candidates(rows: list[dict], unavailable: set[str], top: int | None = None) -> list[dict]:
+    """Use one stable score and tie-break order for live predictions and backtests."""
+    candidates = []
+    for row in rows:
+        if row["champion_id"] is None or row["champion_id"] in unavailable:
+            continue
+        candidate = dict(row)
+        candidate["score"] = int(row["count"]) + 2 * int(row.get("same_game_number") or 0)
+        candidates.append(candidate)
+    candidates.sort(key=lambda r: (-r["score"], str(r["name"]).casefold(), str(r["champion_id"])))
+    total = sum(r["score"] for r in candidates) or 1
+    ranked = [{**r, "probability": round(r["score"] / total, 3)} for r in candidates]
+    return ranked if top is None else ranked[:top]
+
+
 def _game_filter(team_id: str, game_number: int | None, since: date | None) -> tuple[str, list]:
     clauses = ["(g.blue_team_id = ? OR g.red_team_id = ?)", "g.draft_action_count = 20"]
     params: list = [team_id, team_id]
@@ -139,7 +154,7 @@ def matchups(con, role: str, champion_id: str, minute: int = 14, min_games: int 
 
 
 def predict_next(con, team_id: str, action: str, phase: str, unavailable: set[str],
-                 game_number: int | None = None, top: int = 10) -> dict:
+                 game_number: int | None = None, top: int = 10, before: date | None = None) -> dict:
     """Likely next ban or pick by a team in a draft phase, from its history.
 
     Score = phase count over all games + 2 x phase count in the same game number
@@ -147,22 +162,23 @@ def predict_next(con, team_id: str, action: str, phase: str, unavailable: set[st
     rest renormalised. A deliberately simple baseline; its hit rate is measured offline.
     """
     seq_range = {"ban1": (1, 6), "pick1": (7, 12), "ban2": (13, 16), "pick2": (17, 20)}[phase]
-    rows = _rows(con, """
-        SELECT d.champion_id, any_value(d.champion_name) AS name, count(*) AS count,
+    date_filter = "AND g.game_date < ?" if before is not None else ""
+    date_params = [before] if before is not None else []
+    rows = _rows(con, f"""
+        SELECT d.champion_id, min(d.champion_name) AS name, count(*) AS count,
                sum(CASE WHEN g.game_number = ? THEN 1 ELSE 0 END) AS same_game_number
         FROM draft_actions d JOIN game_context g USING (game_id)
         WHERE d.team_id = ? AND d.action = ? AND d.seq BETWEEN ? AND ? AND d.champion_id IS NOT NULL
+          {date_filter}
         GROUP BY 1
-    """, [game_number or 0, team_id, action, *seq_range])
-    candidates = [r for r in rows if r["champion_id"] not in unavailable]
-    for r in candidates:
-        r["score"] = r["count"] + 2 * r["same_game_number"]
-    total = sum(r["score"] for r in candidates) or 1
-    candidates.sort(key=lambda r: r["score"], reverse=True)
-    games_in_phase = con.execute("""
-        SELECT count(DISTINCT game_id) FROM draft_actions WHERE team_id = ? AND action = ? AND seq BETWEEN ? AND ?
-    """, [team_id, action, *seq_range]).fetchone()[0]
+    """, [game_number or 0, team_id, action, *seq_range, *date_params])
+    candidates = rank_candidates(rows, unavailable, top)
+    games_in_phase = con.execute(f"""
+        SELECT count(DISTINCT d.game_id)
+        FROM draft_actions d JOIN game_context g USING (game_id)
+        WHERE d.team_id = ? AND d.action = ? AND d.seq BETWEEN ? AND ? {date_filter}
+    """, [team_id, action, *seq_range, *date_params]).fetchone()[0]
     return {
         "team_id": team_id, "action": action, "phase": phase, "games": games_in_phase,
-        "candidates": [{**r, "probability": round(r["score"] / total, 3)} for r in candidates[:top]],
+        "candidates": candidates,
     }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { api, C9_TEAM_ID, type Champion, type DraftState, type OrderSlot, type SeriesIn, type Team, type Tendencies } from './api'
+import { api, C9_TEAM_ID, type Champion, type DraftState, type OrderSlot, type PredictorAccuracy, type SeriesIn, type Team, type Tendencies } from './api'
 import { ChampionGrid } from './components/ChampionGrid'
 import { Insights } from './components/Insights'
 import { TeamPanel } from './components/TeamPanel'
@@ -16,6 +16,7 @@ export default function App() {
   const [state, setState] = useState<DraftState | null>(null)
   const [tendAll, setTendAll] = useState<Tendencies | null>(null)
   const [tendGame, setTendGame] = useState<Tendencies | null>(null)
+  const [predictorAccuracy, setPredictorAccuracy] = useState<PredictorAccuracy | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -26,6 +27,10 @@ export default function App() {
         setOrder(o)
       })
       .catch((e: Error) => setError(`Can't reach the API (${e.message}). Start it with: uv run uvicorn planner.api:app --port 8000`))
+  }, [])
+
+  useEffect(() => {
+    api.predictorAccuracy().then(setPredictorAccuracy).catch(() => setPredictorAccuracy(null))
   }, [])
 
   useEffect(() => saveSeries(series), [series])
@@ -207,6 +212,7 @@ export default function App() {
           tendAll={tendAll}
           tendGame={tendGame}
           pools={state?.pools ?? {}}
+          accuracy={predictorAccuracy}
           onSelect={record}
         />
       </main>

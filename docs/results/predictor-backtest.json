@@ -1,0 +1,281 @@
+{
+  "cutoff": "2026-01-01",
+  "holdout_games": 449,
+  "evaluated_slots": 8340,
+  "minimum_history_games": 10,
+  "minimum_evaluation_slots": 30,
+  "by_action": {
+    "ban": {
+      "slots": 4170,
+      "skipped_insufficient_history": 320,
+      "skipped_null_action": 0,
+      "team": {
+        "top_1": {
+          "hits": 272,
+          "slots": 4170,
+          "rate": 0.06522781774580336,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 658,
+          "slots": 4170,
+          "rate": 0.1577937649880096,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 978,
+          "slots": 4170,
+          "rate": 0.23453237410071942,
+          "sufficient_sample": true
+        }
+      },
+      "league_popularity": {
+        "top_1": {
+          "hits": 279,
+          "slots": 4170,
+          "rate": 0.06690647482014389,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 544,
+          "slots": 4170,
+          "rate": 0.13045563549160671,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 753,
+          "slots": 4170,
+          "rate": 0.18057553956834532,
+          "sufficient_sample": true
+        }
+      }
+    },
+    "pick": {
+      "slots": 4170,
+      "skipped_insufficient_history": 320,
+      "skipped_null_action": 0,
+      "team": {
+        "top_1": {
+          "hits": 233,
+          "slots": 4170,
+          "rate": 0.05587529976019184,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 589,
+          "slots": 4170,
+          "rate": 0.14124700239808152,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 907,
+          "slots": 4170,
+          "rate": 0.21750599520383693,
+          "sufficient_sample": true
+        }
+      },
+      "league_popularity": {
+        "top_1": {
+          "hits": 183,
+          "slots": 4170,
+          "rate": 0.04388489208633094,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 563,
+          "slots": 4170,
+          "rate": 0.13501199040767387,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 776,
+          "slots": 4170,
+          "rate": 0.18609112709832135,
+          "sufficient_sample": true
+        }
+      }
+    }
+  },
+  "by_phase": {
+    "ban1": {
+      "slots": 2502,
+      "skipped_insufficient_history": 192,
+      "skipped_null_action": 0,
+      "team": {
+        "top_1": {
+          "hits": 202,
+          "slots": 2502,
+          "rate": 0.08073541167066348,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 475,
+          "slots": 2502,
+          "rate": 0.18984812150279776,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 701,
+          "slots": 2502,
+          "rate": 0.28017585931254996,
+          "sufficient_sample": true
+        }
+      },
+      "league_popularity": {
+        "top_1": {
+          "hits": 243,
+          "slots": 2502,
+          "rate": 0.09712230215827339,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 425,
+          "slots": 2502,
+          "rate": 0.16986410871302957,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 550,
+          "slots": 2502,
+          "rate": 0.21982414068745004,
+          "sufficient_sample": true
+        }
+      }
+    },
+    "pick1": {
+      "slots": 2502,
+      "skipped_insufficient_history": 192,
+      "skipped_null_action": 0,
+      "team": {
+        "top_1": {
+          "hits": 174,
+          "slots": 2502,
+          "rate": 0.06954436450839328,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 428,
+          "slots": 2502,
+          "rate": 0.17106314948041568,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 635,
+          "slots": 2502,
+          "rate": 0.25379696243005595,
+          "sufficient_sample": true
+        }
+      },
+      "league_popularity": {
+        "top_1": {
+          "hits": 150,
+          "slots": 2502,
+          "rate": 0.05995203836930456,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 432,
+          "slots": 2502,
+          "rate": 0.17266187050359713,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 596,
+          "slots": 2502,
+          "rate": 0.23820943245403678,
+          "sufficient_sample": true
+        }
+      }
+    },
+    "ban2": {
+      "slots": 1668,
+      "skipped_insufficient_history": 128,
+      "skipped_null_action": 0,
+      "team": {
+        "top_1": {
+          "hits": 70,
+          "slots": 1668,
+          "rate": 0.04196642685851319,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 183,
+          "slots": 1668,
+          "rate": 0.10971223021582734,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 277,
+          "slots": 1668,
+          "rate": 0.16606714628297362,
+          "sufficient_sample": true
+        }
+      },
+      "league_popularity": {
+        "top_1": {
+          "hits": 36,
+          "slots": 1668,
+          "rate": 0.02158273381294964,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 119,
+          "slots": 1668,
+          "rate": 0.07134292565947242,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 203,
+          "slots": 1668,
+          "rate": 0.12170263788968826,
+          "sufficient_sample": true
+        }
+      }
+    },
+    "pick2": {
+      "slots": 1668,
+      "skipped_insufficient_history": 128,
+      "skipped_null_action": 0,
+      "team": {
+        "top_1": {
+          "hits": 59,
+          "slots": 1668,
+          "rate": 0.03537170263788969,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 161,
+          "slots": 1668,
+          "rate": 0.09652278177458033,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 272,
+          "slots": 1668,
+          "rate": 0.1630695443645084,
+          "sufficient_sample": true
+        }
+      },
+      "league_popularity": {
+        "top_1": {
+          "hits": 33,
+          "slots": 1668,
+          "rate": 0.019784172661870502,
+          "sufficient_sample": true
+        },
+        "top_3": {
+          "hits": 131,
+          "slots": 1668,
+          "rate": 0.07853717026378897,
+          "sufficient_sample": true
+        },
+        "top_5": {
+          "hits": 180,
+          "slots": 1668,
+          "rate": 0.1079136690647482,
+          "sufficient_sample": true
+        }
+      }
+    }
+  }
+}

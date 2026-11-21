@@ -8,17 +8,20 @@ from __future__ import annotations
 import threading
 from contextlib import asynccontextmanager
 from datetime import date
+import json
+from typing import Literal
 
 import duckdb
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from pipeline.config import DB_PATH
+from pipeline.config import DB_PATH, REPO_ROOT
 
 from . import stats
 from .rules import DRAFT_ORDER, DraftError, Game, Series, phase_of
 
 C9_TEAM_ID = "47351"  # Cloud9 Kia in the GRID LoL data
+BACKTEST_RESULTS_PATH = REPO_ROOT / "docs" / "results" / "predictor-backtest.json"
 
 _local = threading.local()
 _connections: list = []
@@ -35,6 +38,31 @@ async def lifespan(_app):
 
 
 app = FastAPI(title="C9 Draft Planner", lifespan=lifespan)
+
+
+class HitRate(BaseModel):
+    hits: int
+    slots: int
+    rate: float | None
+    sufficient_sample: bool
+
+
+class PredictorScope(BaseModel):
+    slots: int
+    skipped_insufficient_history: int
+    skipped_null_action: int
+    team: dict[Literal["top_1", "top_3", "top_5"], HitRate]
+    league_popularity: dict[Literal["top_1", "top_3", "top_5"], HitRate]
+
+
+class PredictorAccuracy(BaseModel):
+    cutoff: date
+    holdout_games: int
+    evaluated_slots: int
+    minimum_history_games: int
+    minimum_evaluation_slots: int
+    by_action: dict[Literal["ban", "pick"], PredictorScope]
+    by_phase: dict[Literal["ban1", "pick1", "ban2", "pick2"], PredictorScope]
 
 
 def db():
@@ -78,6 +106,14 @@ def get_pools(team_id: str, since: date | None = None) -> list[dict]:
 @app.get("/api/matchups")
 def get_matchups(role: str, champion_id: str, minute: int = Query(14, ge=10, le=20)) -> dict:
     return stats.matchups(db(), role, champion_id, minute)
+
+
+@app.get("/api/predictor/accuracy", response_model=PredictorAccuracy)
+def get_predictor_accuracy() -> PredictorAccuracy:
+    """Return the aggregate holdout report without exposing per-game rows."""
+    if not BACKTEST_RESULTS_PATH.exists():
+        raise HTTPException(404, "Predictor backtest results not found. Run: uv run python -m planner.backtest")
+    return PredictorAccuracy.model_validate(json.loads(BACKTEST_RESULTS_PATH.read_text(encoding="utf-8")))
 
 
 class GameIn(BaseModel):

@@ -55,12 +55,13 @@ Python package under `pipeline/`, run with uv, reading from `STL_DATA_DIR` (defa
 - [ ] C9 Kia champion pools: seeded from pro games, editable by the coach.
   - Seeded from pro games and shown per player with Fearless strike-through; coach editing not built yet.
 - [x] Opponent tendencies: pick/ban frequency overall and by game number in series, with sample sizes.
+- [x] Opponent next-action prediction hit rate: top-3 bans 658/4,170 (15.8%) vs league popularity 544/4,170 (13.0%); picks 589/4,170 (14.1%) vs 563/4,170 (13.5%).
 - [ ] Lane matchups: gold difference at 14 by matchup, with sample sizes.
   - API done (`/api/matchups`); not yet shown in the UI (planned for C9 pick slots once the enemy laner is known).
 
 **Done when:** a coach can step through a full Fearless Bo5 against a chosen opponent and see that opponent's tendencies at each step.
 
-**Status (20 Nov):** a full Fearless series can be stepped through end to end (checked in a headless browser: game 2 locks the 10 game-1 picks). The rules engine replays 739 of 740 real series; the one rejection is a feed anomaly. A baseline next-action predictor is shown for opponent slots; its hit rate is not measured yet.
+**Status (20 Nov):** a full Fearless series can be stepped through end to end (checked in a headless browser: game 2 locks the 10 game-1 picks). The rules engine replays 739 of 740 real series; the one rejection is a feed anomaly. A baseline next-action predictor is shown for opponent slots; its chronological holdout hit rate is measured above and in `docs/results/predictor-backtest.json`.
 
 ## 3. Win-probability models and WPA (target 22 Dec)
 

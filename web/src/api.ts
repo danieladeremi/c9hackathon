@@ -28,6 +28,34 @@ export interface OrderSlot {
   phase: 'ban1' | 'pick1' | 'ban2' | 'pick2'
 }
 
+export type DraftAction = 'ban' | 'pick'
+export type DraftPhase = 'ban1' | 'pick1' | 'ban2' | 'pick2'
+
+export interface HitRate {
+  hits: number
+  slots: number
+  rate: number | null
+  sufficient_sample: boolean
+}
+
+export interface PredictorScope {
+  slots: number
+  skipped_insufficient_history: number
+  skipped_null_action: number
+  team: Record<'top_1' | 'top_3' | 'top_5', HitRate>
+  league_popularity: Record<'top_1' | 'top_3' | 'top_5', HitRate>
+}
+
+export interface PredictorAccuracy {
+  cutoff: string
+  holdout_games: number
+  evaluated_slots: number
+  minimum_history_games: number
+  minimum_evaluation_slots: number
+  by_action: Record<DraftAction, PredictorScope>
+  by_phase: Record<DraftPhase, PredictorScope>
+}
+
 export interface GameIn {
   blue_team: string
   red_team: string
@@ -54,9 +82,9 @@ export interface Candidate {
 
 export interface NextSlot {
   seq: number
-  action: 'ban' | 'pick'
+  action: DraftAction
   team_id: string
-  phase: OrderSlot['phase']
+  phase: DraftPhase
   prediction: { games: number; candidates: Candidate[] }
 }
 
@@ -128,6 +156,7 @@ export const api = {
   teams: () => request<Team[]>('/api/teams'),
   champions: () => request<Champion[]>('/api/champions'),
   order: () => request<OrderSlot[]>('/api/draft/order'),
+  predictorAccuracy: () => request<PredictorAccuracy>('/api/predictor/accuracy'),
   tendencies: (teamId: string, gameNumber?: number, since?: string | null) => {
     const params = new URLSearchParams()
     if (gameNumber) params.set('game_number', String(gameNumber))

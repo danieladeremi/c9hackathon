@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { NextSlot, PlayerPool, Tendencies, TendencyRow } from '../api'
+import type { NextSlot, PlayerPool, PredictorAccuracy, Tendencies, TendencyRow } from '../api'
 
 interface Props {
   next: NextSlot | null
@@ -11,6 +11,7 @@ interface Props {
   tendAll: Tendencies | null
   tendGame: Tendencies | null
   pools: Record<string, PlayerPool[]>
+  accuracy: PredictorAccuracy | null
   onSelect: (championId: string) => void
 }
 
@@ -28,7 +29,7 @@ function Bar({ value }: { value: number }) {
 
 /** Evidence for the current slot, the opponent's habits by game number, and what each roster has left. */
 export function Insights(props: Props) {
-  const { next, c9Id, opponentId, teamNames, gameNumber, unavailable, tendAll, tendGame, pools, onSelect } = props
+  const { next, c9Id, opponentId, teamNames, gameNumber, unavailable, tendAll, tendGame, pools, accuracy, onSelect } = props
   const [tab, setTab] = useState<'slot' | 'tendencies' | 'pools'>('slot')
   const opp = teamNames.get(opponentId) ?? 'Opponent'
 
@@ -48,7 +49,7 @@ export function Insights(props: Props) {
         ))}
       </div>
       {tab === 'slot' && (
-        <SlotView next={next} c9Id={c9Id} opp={opp} unavailable={unavailable} tendGame={tendGame} tendAll={tendAll} pools={pools} onSelect={onSelect} />
+        <SlotView next={next} c9Id={c9Id} opp={opp} unavailable={unavailable} tendGame={tendGame} tendAll={tendAll} pools={pools} accuracy={accuracy} onSelect={onSelect} />
       )}
       {tab === 'tendencies' && <TendencyView opp={opp} gameNumber={gameNumber} tendAll={tendAll} tendGame={tendGame} />}
       {tab === 'pools' && <PoolsView pools={pools} teamNames={teamNames} order={[c9Id, opponentId]} />}
@@ -56,7 +57,7 @@ export function Insights(props: Props) {
   )
 }
 
-function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, onSelect }: {
+function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, accuracy, onSelect }: {
   next: NextSlot | null
   c9Id: string
   opp: string
@@ -64,6 +65,7 @@ function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, onSe
   tendGame: Tendencies | null
   tendAll: Tendencies | null
   pools: Record<string, PlayerPool[]>
+  accuracy: PredictorAccuracy | null
   onSelect: (id: string) => void
 }) {
   if (!next) return <p className="muted pad">Draft complete. Record the winner to plan the next game.</p>
@@ -75,6 +77,7 @@ function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, onSe
       <div className="pad">
         <h3 className="insight-title">Likely {opp} {next.action}s now</h3>
         <p className="evidence">From {next.prediction.games} {opp} drafts in this phase; same game number counts double. Unavailable champions removed.</p>
+        <PredictionAccuracy accuracy={accuracy} action={next.action} phase={next.phase} />
         {cands.length === 0 ? (
           <p className="muted">No history for this phase.</p>
         ) : (
@@ -129,6 +132,30 @@ function SlotView({ next, c9Id, opp, unavailable, tendGame, tendAll, pools, onSe
         ))}
       </ol>
     </div>
+  )
+}
+
+function PredictionAccuracy({ accuracy, action, phase }: {
+  accuracy: PredictorAccuracy | null
+  action: NextSlot['action']
+  phase: NextSlot['phase']
+}) {
+  const scope = accuracy?.by_phase[phase]
+  const team = scope?.team.top_3
+  const baseline = scope?.league_popularity.top_3
+  if (!accuracy || !team || !baseline) return null
+  if (!team.sufficient_sample || !baseline.sufficient_sample || team.rate === null || baseline.rate === null) {
+    return (
+      <p className="evidence">
+        Not enough evaluation evidence for {phase}: {team.slots} {action} slots; {accuracy.minimum_evaluation_slots} required.
+      </p>
+    )
+  }
+  return (
+    <p className="evidence">
+      Top-3 hit rate in {phase} on games from {accuracy.cutoff}: {pct(team.rate)} of {team.slots} {action} slots
+      (league-popularity baseline: {pct(baseline.rate)}).
+    </p>
   )
 }
 

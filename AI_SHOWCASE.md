@@ -38,7 +38,12 @@ The developer chose the idea and the category, approved each design change, and 
 - Opened the project in PyCharm, added shared run configurations, and wrote `.junie/guidelines.md` so Junie starts every task
   with the data-licence rules and the laptop's memory limits.
 - Junie task 01 (`.junie/tasks/01-predictor-backtest.md`): measure the opponent-prediction hit rate on held-out games against a
-  league-popularity baseline. *Result: pending.*
+  league-popularity baseline. **Junie built** `planner/backtest.py` (a day-by-day replay so no prediction sees same-day or later
+  games), a no-leakage `before` option, a shared ranking function so the live board and the backtest score identically, an API
+  endpoint, the hit-rate line on the board, and synthetic-data tests. **Claude reviewed** the diff and re-ran the tests and the
+  backtest independently (same numbers, 3 s). **Result:** top-3 hit rate on the 2026 season, bans 15.8% vs 13.0% for the
+  league-popularity baseline, picks 14.1% vs 13.5%: only a small edge, now shown honestly on the board. Diagnosis: all games since
+  January 2025 count equally, so last season's meta drowns out recent habits. That became Junie task 02.
 
 ### 21 Nov 2026: win-probability models (Claude Code, in PyCharm)
 - Built Elo team strength, a pre-game model and an in-game model (logistic regression against an MLP), trained on 2025 and
